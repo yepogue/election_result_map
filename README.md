@@ -7,7 +7,8 @@ An interactive, source-linked precinct map for the September 1, 2026 Democratic 
 - All 59 district precincts, using official MassGIS 2022 ward and precinct boundaries.
 - Precinct-level votes for Will Brownsberger and Max Lander.
 - Turnout calculated from ballots cast and registered voters.
-- Hover, keyboard, search, and municipality filters.
+- Simultaneous candidate-lead color and turnout-size encoding, plus a turnout-only view.
+- Hover, single-tap mobile details, keyboard access, search, and municipality filters.
 - Downloadable CSV results and GeoJSON boundaries.
 - Direct links to the original municipal election files and state boundary sources.
 
@@ -18,8 +19,9 @@ The mapped vote totals are the published precinct snapshot assembled from the fo
 1. Open `public/data/results.csv` in Excel or Google Sheets.
 2. Keep the header row and precinct IDs unchanged.
 3. Replace the numbers or add corrected rows.
-4. Export the sheet as a UTF-8 CSV with the same filename.
-5. Run the validation and build commands below.
+4. Update final district totals, status, and dates in `public/data/election.json`.
+5. Export the sheet as a UTF-8 CSV with the same filename.
+6. Run the validation and build commands below.
 
 See `MAINTENANCE.md` for the field definitions, expected totals, and a release checklist.
 

@@ -25,6 +25,17 @@ type Source = {
   usedFor: string;
 };
 
+type ElectionMeta = {
+  dashboard_updated: string;
+  status: string;
+  recount_completed: string;
+  brownsberger_votes: number;
+  lander_votes: number;
+  margin: number;
+  precinct_data_label: string;
+  note: string;
+};
+
 type Geometry = {
   type: "Polygon" | "MultiPolygon";
   coordinates: number[][][] | number[][][][];
@@ -57,9 +68,11 @@ const CITY_CODES: Record<string, string> = {
 };
 
 const CITY_ORDER = ["All", "Boston", "Cambridge", "Watertown", "Belmont"];
-const BROWNSBERGER = "#A33F8C";
-const LANDER = "#07827B";
-const NEUTRAL = "#C8C6BE";
+const BROWNSBERGER = "#0072B2";
+const BROWNSBERGER_LIGHT = "#8CC8E8";
+const LANDER = "#D55E00";
+const LANDER_LIGHT = "#F2B176";
+const NEUTRAL = "#D6DCE1";
 
 function parseCsv(text: string): ResultRow[] {
   const [headerLine, ...lines] = text.trim().split(/\r?\n/);
@@ -100,6 +113,11 @@ function precinctLabel(row: ResultRow) {
     : `${row.municipality} · Precinct ${row.precinct}`;
 }
 
+function brownsbergerShare(row: ResultRow) {
+  const twoCandidateVotes = row.brownsberger_votes + row.lander_votes;
+  return twoCandidateVotes ? (row.brownsberger_votes / twoCandidateVotes) * 100 : 0;
+}
+
 function resultId(feature: PrecinctFeature) {
   const town = feature.properties.TOWN;
   const code = CITY_CODES[town];
@@ -119,6 +137,7 @@ function useDashboardData() {
   const [rows, setRows] = useState<ResultRow[]>([]);
   const [geo, setGeo] = useState<FeatureCollection | null>(null);
   const [sources, setSources] = useState<Source[]>([]);
+  const [election, setElection] = useState<ElectionMeta | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -126,16 +145,18 @@ function useDashboardData() {
       fetch("/assets/data/results.csv").then((response) => response.text()),
       fetch("/assets/data/district-precincts.geojson").then((response) => response.json()),
       fetch("/assets/data/sources.json").then((response) => response.json()),
+      fetch("/assets/data/election.json").then((response) => response.json()),
     ])
-      .then(([csv, geography, sourceList]) => {
+      .then(([csv, geography, sourceList, electionMeta]) => {
         setRows(parseCsv(csv));
         setGeo(geography as FeatureCollection);
         setSources(sourceList as Source[]);
+        setElection(electionMeta as ElectionMeta);
       })
       .catch(() => setError("The dashboard data could not be loaded."));
   }, []);
 
-  return { rows, geo, sources, error };
+  return { rows, geo, sources, election, error };
 }
 
 function DownloadIcon() {
@@ -234,16 +255,33 @@ function ElectionMap({
     if (!row) return "#E7E5DF";
     if (metric === "turnout") {
       const turnout = row.ballots_cast_total / row.registered_voters;
-      const lightness = Math.max(34, 82 - turnout * 95);
-      return `hsl(35 53% ${lightness}%)`;
+      if (turnout < 0.2) return "#E8EEF2";
+      if (turnout < 0.3) return "#B7CBD6";
+      if (turnout < 0.4) return "#668FA4";
+      return "#173F53";
     }
     const candidateVotes = row.brownsberger_votes + row.lander_votes;
     const lead = candidateVotes ? (row.brownsberger_votes - row.lander_votes) / candidateVotes : 0;
-    if (Math.abs(lead) < 0.002) return NEUTRAL;
-    const opacity = Math.min(0.96, 0.34 + Math.abs(lead) * 1.65);
+    if (Math.abs(lead) < 0.01) return NEUTRAL;
+    const strongLead = Math.abs(lead) >= 0.1;
     return row.brownsberger_votes > row.lander_votes
-      ? `color-mix(in srgb, ${BROWNSBERGER} ${opacity * 100}%, white)`
-      : `color-mix(in srgb, ${LANDER} ${opacity * 100}%, white)`;
+      ? strongLead ? BROWNSBERGER : BROWNSBERGER_LIGHT
+      : strongLead ? LANDER : LANDER_LIGHT;
+  };
+
+  const featureCenter = (feature: PrecinctFeature) => {
+    const points = allCoordinates(feature.geometry);
+    const center = points.reduce(
+      (sum, point) => [sum[0] + point[0], sum[1] + point[1]],
+      [0, 0],
+    );
+    return project([center[0] / points.length, center[1] / points.length]);
+  };
+
+  const turnoutMarkerRadius = (row: ResultRow) => {
+    const turnout = row.ballots_cast_total / row.registered_voters;
+    const scaled = Math.max(0, Math.min(1, (turnout - 0.1) / 0.35));
+    return 3.5 + scaled * 7.5;
   };
 
   const moveTooltip = (event: React.MouseEvent, id: string) => {
@@ -279,15 +317,31 @@ function ElectionMap({
                 className={`precinct-shape${active ? " active" : ""}${faded ? " faded" : ""}`}
                 tabIndex={0}
                 role="button"
-                aria-label={row ? `${precinctLabel(row)}. Brownsberger ${row.brownsberger_votes} votes. Lander ${row.lander_votes} votes.` : feature.properties.WP_NAME}
+                aria-label={row ? `${precinctLabel(row)}. Brownsberger ${row.brownsberger_votes} votes, ${percent(brownsbergerShare(row))} of the two-candidate vote. Lander ${row.lander_votes} votes. Turnout ${percent((row.ballots_cast_total / row.registered_voters) * 100)}.` : feature.properties.WP_NAME}
                 onMouseMove={(event) => moveTooltip(event, id)}
                 onMouseLeave={() => setHovered(null)}
                 onFocus={() => setHovered({ id, x: 470, y: 95, maxX: 546 })}
                 onBlur={() => setHovered(null)}
                 onClick={() => onSelect(id)}
+                onPointerUp={(event) => {
+                  if (event.pointerType !== "mouse") {
+                    setHovered(null);
+                    onSelect(id);
+                  }
+                }}
               />
             );
           })}
+          {metric === "lead" ? (
+            <g className="turnout-markers" aria-hidden="true">
+              {geo.features.map((feature) => {
+                const row = lookup.get(resultId(feature));
+                if (!row || (city !== "All" && row.municipality !== city)) return null;
+                const [cx, cy] = featureCenter(feature);
+                return <circle key={`turnout-${row.id}`} cx={cx} cy={cy} r={turnoutMarkerRadius(row)} />;
+              })}
+            </g>
+          ) : null}
         </g>
       </svg>
 
@@ -302,13 +356,14 @@ function ElectionMap({
           className="map-tooltip"
           style={{
             left: Math.min(hovered.x + 14, hovered.maxX),
-            top: Math.max(12, hovered.y - 118),
+            top: Math.max(12, hovered.y - 146),
           }}
         >
           <strong>{precinctLabel(hoveredRow)}</strong>
           <div><span><i style={{ background: BROWNSBERGER }} />Brownsberger</span><b>{number(hoveredRow.brownsberger_votes)}</b></div>
           <div><span><i style={{ background: LANDER }} />Lander</span><b>{number(hoveredRow.lander_votes)}</b></div>
           <div className="tooltip-rule" />
+          <div><span>Brownsberger share</span><b>{percent(brownsbergerShare(hoveredRow))}</b></div>
           <div><span>Total primary turnout</span><b>{percent((hoveredRow.ballots_cast_total / hoveredRow.registered_voters) * 100)}</b></div>
         </div>
       ) : null}
@@ -319,12 +374,20 @@ function ElectionMap({
       </div>
 
       {selectedRow ? (
-        <div className="selection-card">
-          <div>
-            <span className="eyebrow">Selected precinct</span>
-            <strong>{precinctLabel(selectedRow)}</strong>
+        <div className="selection-card" aria-live="polite">
+          <div className="selection-card-head">
+            <div>
+              <span className="eyebrow">Selected precinct</span>
+              <strong>{precinctLabel(selectedRow)}</strong>
+            </div>
+            <button onClick={() => onSelect("")} aria-label="Clear selected precinct">×</button>
           </div>
-          <button onClick={() => onSelect("")} aria-label="Clear selected precinct">×</button>
+          <div className="selection-results">
+            <span><b>{number(selectedRow.brownsberger_votes)}</b>Brownsberger</span>
+            <span><b>{number(selectedRow.lander_votes)}</b>Lander</span>
+            <span><b>{percent(brownsbergerShare(selectedRow))}</b>Brownsberger share</span>
+            <span><b>{percent((selectedRow.ballots_cast_total / selectedRow.registered_voters) * 100)}</b>Turnout</span>
+          </div>
         </div>
       ) : null}
     </div>
@@ -332,7 +395,7 @@ function ElectionMap({
 }
 
 function App() {
-  const { rows, geo, sources, error } = useDashboardData();
+  const { rows, geo, sources, election, error } = useDashboardData();
   const [city, setCity] = useState("All");
   const [metric, setMetric] = useState<Metric>("lead");
   const [selectedId, setSelectedId] = useState("");
@@ -383,16 +446,17 @@ function App() {
   }, [rows, city, query]);
 
   const candidateVotes = totals.brownsberger + totals.lander;
-  const brownsbergerShare = candidateVotes ? (totals.brownsberger / candidateVotes) * 100 : 0;
-  const landerShare = candidateVotes ? (totals.lander / candidateVotes) * 100 : 0;
-
   if (error) {
     return <main className="loading-state"><p>{error}</p></main>;
   }
 
-  if (!rows.length || !geo) {
+  if (!rows.length || !geo || !election) {
     return <main className="loading-state"><span className="loader" /><p>Loading precinct returns…</p></main>;
   }
+
+  const finalCandidateVotes = election.brownsberger_votes + election.lander_votes;
+  const finalBrownsbergerShare = (election.brownsberger_votes / finalCandidateVotes) * 100;
+  const finalLanderShare = (election.lander_votes / finalCandidateVotes) * 100;
 
   return (
     <main>
@@ -415,8 +479,8 @@ function App() {
         <div className="hero-copy">
           <div className="status-line">
             <span className="live-dot" />
-            <span>Pre-recount precinct snapshot</span>
-            <span>Updated Sep. 10, 2026</span>
+            <span>{election.status}</span>
+            <span>Updated {election.dashboard_updated}</span>
           </div>
           <p className="kicker">Massachusetts State Senate · Democratic primary</p>
           <h1>Brownsberger <span>vs.</span> Lander</h1>
@@ -424,42 +488,42 @@ function App() {
           <p className="intro">A precinct-level view of the September 1, 2026 primary across Boston, Cambridge, Watertown, and Belmont.</p>
         </div>
 
-        <aside className="result-card" aria-label="Pre-recount result summary">
+        <aside className="result-card" aria-label="Final recount result summary">
           <div className="result-card-top">
-            <span>Official pre-recount totals</span>
-            <span className="result-chip">59 precincts</span>
+            <span>Final districtwide recount</span>
+            <span className="result-chip">Complete {election.recount_completed}</span>
           </div>
           <div className="candidate-row">
             <div>
               <i style={{ background: BROWNSBERGER }} />
               <span>William N. Brownsberger</span>
             </div>
-            <strong>{number(totals.brownsberger)}</strong>
-            <b>{percent(brownsbergerShare, 2)}</b>
+            <strong>{number(election.brownsberger_votes)}</strong>
+            <b>{percent(finalBrownsbergerShare, 2)}</b>
           </div>
           <div className="candidate-row">
             <div>
               <i style={{ background: LANDER }} />
               <span>Daniel Lander</span>
             </div>
-            <strong>{number(totals.lander)}</strong>
-            <b>{percent(landerShare, 2)}</b>
+            <strong>{number(election.lander_votes)}</strong>
+            <b>{percent(finalLanderShare, 2)}</b>
           </div>
           <div className="result-bar" aria-hidden="true">
-            <span style={{ width: `${brownsbergerShare}%`, background: BROWNSBERGER }} />
-            <span style={{ width: `${landerShare}%`, background: LANDER }} />
+            <span style={{ width: `${finalBrownsbergerShare}%`, background: BROWNSBERGER }} />
+            <span style={{ width: `${finalLanderShare}%`, background: LANDER }} />
           </div>
           <div className="margin-note">
-            <strong>Brownsberger +{number(totals.brownsberger - totals.lander)}</strong>
-            <span>in the mapped pre-recount data</span>
+            <strong>Brownsberger +{number(election.margin)}</strong>
+            <span>after the districtwide recount</span>
           </div>
-          <div className="recount-note"><InfoIcon /><span>The districtwide recount completed September 10; reporting put the final margin at 35 votes. The map remains tied to the published precinct files.</span></div>
+          <div className="recount-note"><InfoIcon /><span>The final recount totals are {number(election.brownsberger_votes)} to {number(election.lander_votes)}. {election.note}</span></div>
         </aside>
       </section>
 
       <section className="stat-strip" aria-label="Dataset summary">
         <div><span>Precincts mapped</span><strong>{rows.length}</strong><small>Across 4 municipalities</small></div>
-        <div><span>Two-candidate votes</span><strong>{number(candidateVotes)}</strong><small>Official pre-recount snapshot</small></div>
+        <div><span>Mapped candidate votes</span><strong>{number(candidateVotes)}</strong><small>{election.precinct_data_label}</small></div>
         <div><span>Primary turnout</span><strong>{percent((totals.ballots / totals.registered) * 100)}</strong><small>{number(totals.ballots)} of {number(totals.registered)} registered</small></div>
         <div><span>Closest precincts</span><strong>{rows.filter((row) => Math.abs(row.brownsberger_votes - row.lander_votes) <= 10).length}</strong><small>Separated by 10 votes or fewer</small></div>
       </section>
@@ -469,11 +533,23 @@ function App() {
           <div>
             <p className="section-number">01 / EXPLORE</p>
             <h2>Precinct map</h2>
-            <p>Hover or focus a precinct for vote counts and turnout. Select a municipality to bring its boundaries forward.</p>
+            <p>Color shows the candidate lead; circle size shows turnout at the same time. On a phone, tap a precinct once to open its full details.</p>
           </div>
           <div className="metric-control" aria-label="Map display metric">
-            <button className={metric === "lead" ? "active" : ""} onClick={() => setMetric("lead")}>Candidate lead</button>
-            <button className={metric === "turnout" ? "active" : ""} onClick={() => setMetric("turnout")}>Turnout</button>
+            <button
+              className={metric === "lead" ? "active" : ""}
+              aria-pressed={metric === "lead"}
+              onClick={() => setMetric("lead")}
+            >
+              Result + turnout
+            </button>
+            <button
+              className={metric === "turnout" ? "active" : ""}
+              aria-pressed={metric === "turnout"}
+              onClick={() => setMetric("turnout")}
+            >
+              Turnout only
+            </button>
           </div>
         </div>
 
@@ -499,15 +575,19 @@ function App() {
             <div className="legend" aria-label="Map legend">
               {metric === "lead" ? (
                 <>
-                  <span><i style={{ background: BROWNSBERGER }} />Brownsberger higher total</span>
-                  <span><i style={{ background: NEUTRAL }} />Nearly even</span>
-                  <span><i style={{ background: LANDER }} />Lander higher total</span>
-                  <small>Darker color indicates a larger two-candidate margin.</small>
+                  <span className="candidate-key"><b style={{ background: BROWNSBERGER }}>B</b>Brownsberger lead</span>
+                  <span className="candidate-key"><b style={{ background: NEUTRAL, color: "#15232d" }}>≈</b>Within 1 point</span>
+                  <span className="candidate-key"><b style={{ background: LANDER }}>L</b>Lander lead</span>
+                  <span className="turnout-size-legend"><i /><i /><i />Larger circle = higher turnout</span>
+                  <small>Dark fill marks a lead of 10 percentage points or more.</small>
                 </>
               ) : (
                 <>
-                  <span className="turnout-ramp" /><span>Lower turnout</span><span>Higher turnout</span>
-                  <small>Total ballots cast ÷ registered voters.</small>
+                  <span className="turnout-bin"><i style={{ background: "#E8EEF2" }} />Under 20%</span>
+                  <span className="turnout-bin"><i style={{ background: "#B7CBD6" }} />20–29.9%</span>
+                  <span className="turnout-bin"><i style={{ background: "#668FA4" }} />30–39.9%</span>
+                  <span className="turnout-bin"><i style={{ background: "#173F53" }} />40%+</span>
+                  <small>Total primary ballots ÷ registered voters.</small>
                 </>
               )}
             </div>
@@ -571,6 +651,7 @@ function App() {
                 <th className="numeric">Registered</th>
                 <th className="numeric">Total turnout</th>
                 <th className="numeric">Brownsberger</th>
+                <th className="numeric">Brownsberger %</th>
                 <th className="numeric">Lander</th>
                 <th className="numeric">Two-candidate margin</th>
                 <th>Status</th>
@@ -585,6 +666,7 @@ function App() {
                     <td className="numeric">{number(row.registered_voters)}</td>
                     <td className="numeric"><strong>{percent((row.ballots_cast_total / row.registered_voters) * 100)}</strong><span>{number(row.ballots_cast_total)} ballots</span></td>
                     <td className="numeric candidate-value brownsberger">{number(row.brownsberger_votes)}</td>
+                    <td className="numeric"><strong>{percent(brownsbergerShare(row))}</strong><span>two-candidate share</span></td>
                     <td className="numeric candidate-value lander">{number(row.lander_votes)}</td>
                     <td className="numeric">{difference === 0 ? "Even" : `${difference > 0 ? "B" : "L"} +${Math.abs(difference)}`}</td>
                     <td><span className={`status-pill ${row.result_status.startsWith("official") ? "official" : "mixed"}`}>{row.result_status.startsWith("official") ? "Official" : "Boston precinct file"}</span></td>
@@ -616,7 +698,7 @@ function App() {
             <span>2</span><div><strong>Use total primary turnout</strong><p>Turnout is total Democratic and Republican ballots divided by registered voters.</p></div>
           </article>
           <article>
-            <span>3</span><div><strong>Separate status from data</strong><p>Boston&apos;s precinct-level publication status is preserved while its totals are cross-checked to the official city result.</p></div>
+            <span>3</span><div><strong>Separate final totals from precinct detail</strong><p>The recount total is shown at the top, while the map preserves the published precinct rows so no recount changes are assigned to the wrong precinct.</p></div>
           </article>
         </div>
 
@@ -636,11 +718,11 @@ function App() {
         <div>
           <p className="section-number">BUILT FOR HANDOFF</p>
           <h2>Update it without touching the code.</h2>
-          <p>The dashboard reads two plain data files. Election staff can open the CSV in Excel, replace values, save it with the same name, and refresh the site.</p>
+          <p>The dashboard reads four plain data files. Election staff can update results in Excel and edit the small election summary file in any text editor.</p>
         </div>
         <ol>
           <li><span>01</span><div><strong>Update results.csv</strong><p>One row per precinct; keep the column names unchanged.</p></div></li>
-          <li><span>02</span><div><strong>Check sources.json</strong><p>Add or replace links whenever a municipality publishes a revision.</p></div></li>
+          <li><span>02</span><div><strong>Update election.json and sources.json</strong><p>Change final totals, status text, dates, and source links without editing the application code.</p></div></li>
           <li><span>03</span><div><strong>Republish</strong><p>Run the documented build command. Boundaries only change after redistricting.</p></div></li>
         </ol>
       </section>

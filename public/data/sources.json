@@ -64,16 +64,16 @@
   },
   {
     "municipality": "Recount",
-    "title": "Boston Election Department recount notice",
+    "title": "Boston Election Department certified recount result",
     "url": "https://search.boston.gov/news/boston-election-department-completes-recount-middlesex-and-suffolk-senate-district-election",
-    "status": "Official Boston recount notice",
-    "usedFor": "Boston recount total and recount completion status"
+    "status": "Official; certified September 9, 2026",
+    "usedFor": "Boston recount totals and recount completion status"
   },
   {
     "municipality": "Recount reporting",
-    "title": "Brownsberger wins districtwide recount by 35 votes",
-    "url": "https://www.axios.com/local/boston/2026/09/10/senate-recount-brownsberger-lander-massachusetts",
-    "status": "State House News Service reporting via Axios",
-    "usedFor": "Districtwide post-recount margin; not used to allocate precinct votes"
+    "title": "Final districtwide recount totals: 12,293 to 12,258",
+    "url": "https://www.wcvb.com/article/suffolk-middlesex-senate-race-recount-results-lander-brownsberger/73674075",
+    "status": "WCVB reporting figures from the Office of the Secretary of the Commonwealth",
+    "usedFor": "Final 35-vote districtwide margin; not used to allocate precinct votes"
   }
 ]

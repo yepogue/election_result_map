@@ -1,0 +1,10 @@
+{
+  "dashboard_updated": "September 11, 2026",
+  "status": "Districtwide recount complete",
+  "recount_completed": "September 10, 2026",
+  "brownsberger_votes": 12293,
+  "lander_votes": 12258,
+  "margin": 35,
+  "precinct_data_label": "Published pre-recount precinct snapshot",
+  "note": "The precinct map and table remain tied to the published pre-recount precinct files because a complete districtwide precinct-level recount file has not been published."
+}
