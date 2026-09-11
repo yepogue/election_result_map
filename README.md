@@ -8,11 +8,13 @@ An interactive, source-linked precinct map for the September 1, 2026 Democratic 
 - Precinct-level votes for Will Brownsberger and Max Lander.
 - Turnout calculated from ballots cast and registered voters.
 - Simultaneous candidate-lead color and turnout-size encoding, plus a turnout-only view.
-- Hover, single-tap mobile details, keyboard access, search, and municipality filters.
+- Explicit map color thresholds and municipal Brownsberger vote shares.
+- Hover, single-tap mobile details, keyboard access, search, municipality filters, and sortable table columns.
 - Downloadable CSV results and GeoJSON boundaries.
 - Direct links to the original municipal election files and state boundary sources.
+- Census ACS/CVAP context links and a documented path for obtaining aggregate primary-voter enrollment splits.
 
-The mapped vote totals are the published precinct snapshot assembled from the four municipalities. A separate note reports the districtwide post-recount margin without treating it as precinct-level data.
+The final totals come from the Secretary of the Commonwealth's certified results database. The mapped vote totals are the published precinct snapshot assembled from the four municipalities; the site does not treat districtwide recount changes as precinct-level data.
 
 ## Update the data
 

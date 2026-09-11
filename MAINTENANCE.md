@@ -38,6 +38,7 @@ This site is deliberately file-based. Routine election corrections do not requir
 8. Confirm the displayed aggregate totals against the source documents.
 9. Run `npm run lint` and `npm run build`.
 10. Check the map, downloads, source links, and a narrow mobile viewport before publishing.
+11. Check that table sort buttons work in both directions and that the map legend matches the fill thresholds in the code.
 
 ## Current published-snapshot checks
 
@@ -49,6 +50,16 @@ This site is deliberately file-based. Routine election corrections do not requir
 - Watertown: 3,294 / 3,451
 
 The pair on each municipality line is Brownsberger / Lander. Boston's precinct candidate counts use the city's amended district-contest file; registration and total-turnout fields use the city's full precinct breakdown. The dashboard labels that distinction and links both files.
+
+The Secretary of the Commonwealth's certified search results report the final districtwide recount totals. Its municipality and precinct detail page still shows the pre-recount canvass, which is why the map totals differ from the final headline.
+
+## Demographic and primary-voter context
+
+- Census ACS and CVAP values are estimates for Census tracts or block groups, not direct measurements for the dashboard's 2022 election precinct polygons.
+- Before adding precinct demographics, create a documented population-weighted crosswalk and retain the source estimate's margin of error.
+- Published election returns report Democratic ballots cast but do not split those ballots between registered Democrats and unenrolled voters.
+- The Secretary of the Commonwealth's registration workbook supplies party enrollment counts by precinct, but those counts describe eligibility, not participation.
+- Massachusetts General Laws Chapter 53, Section 37 provides access to marked primary voting lists. If local election offices provide them, aggregate the enrollment split by precinct and do not publish voter names or addresses.
 
 ## Common mistakes
 

@@ -70,10 +70,52 @@
     "usedFor": "Boston recount totals and recount completion status"
   },
   {
+    "municipality": "Final result",
+    "title": "Secretary of the Commonwealth certified 2026 State Primary results",
+    "url": "https://electionstats.state.ma.us/elections/search/date:2026-09-01",
+    "status": "Official statewide results database",
+    "usedFor": "Final recount totals: Brownsberger 12,293; Lander 12,258; all others 18; blanks 1,080"
+  },
+  {
     "municipality": "Recount reporting",
-    "title": "Final districtwide recount totals: 12,293 to 12,258",
+    "title": "Final districtwide recount coverage",
     "url": "https://www.wcvb.com/article/suffolk-middlesex-senate-race-recount-results-lander-brownsberger/73674075",
-    "status": "WCVB reporting figures from the Office of the Secretary of the Commonwealth",
-    "usedFor": "Final 35-vote districtwide margin; not used to allocate precinct votes"
+    "status": "Secondary confirmation",
+    "usedFor": "Recount completion and 35-vote margin"
+  },
+  {
+    "municipality": "Census",
+    "title": "2020–2024 American Community Survey 5-year data profiles",
+    "url": "https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/",
+    "status": "Official Census estimates",
+    "usedFor": "Social, economic, housing, and demographic context"
+  },
+  {
+    "municipality": "Census",
+    "title": "2020–2024 Citizen Voting-Age Population special tabulation",
+    "url": "https://www.census.gov/programs-surveys/decennial-census/about/voting-rights/cvap/2020-2024-CVAP.html",
+    "status": "Official Census estimates",
+    "usedFor": "Citizen voting-age population by race and ethnicity"
+  },
+  {
+    "municipality": "Enrollment",
+    "title": "Election Data and Statistics Hub — September 2026 State Primaries",
+    "url": "https://www.sec.state.ma.us/divisions/elections/research-and-statistics/statistics-hub.htm",
+    "status": "Secretary of the Commonwealth data",
+    "usedFor": "Registered voter and party enrollment counts by precinct; not a record of who voted"
+  },
+  {
+    "municipality": "Voter file",
+    "title": "Massachusetts General Laws, Chapter 53, Section 37",
+    "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section37",
+    "status": "Official state law",
+    "usedFor": "Marked primary voting lists and access after the election"
+  },
+  {
+    "municipality": "Primary rules",
+    "title": "How to Vote in a Primary",
+    "url": "https://www.sec.state.ma.us/divisions/elections/voting-information/vote-primary.htm",
+    "status": "Secretary of the Commonwealth guidance",
+    "usedFor": "How enrolled and unenrolled voters choose primary ballots"
   }
 ]

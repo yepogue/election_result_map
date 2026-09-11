@@ -6,5 +6,5 @@
   "lander_votes": 12258,
   "margin": 35,
   "precinct_data_label": "Published pre-recount precinct snapshot",
-  "note": "The precinct map and table remain tied to the published pre-recount precinct files because a complete districtwide precinct-level recount file has not been published."
+  "note": "The Secretary of the Commonwealth's certified statewide database now reports these final totals. Its municipality and precinct detail remains the published pre-recount canvass, so the map and table keep that snapshot rather than assigning recount changes to the wrong precinct."
 }

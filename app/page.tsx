@@ -59,6 +59,8 @@ type FeatureCollection = {
 };
 
 type Metric = "lead" | "turnout";
+type SortKey = "precinct" | "registered" | "turnout" | "brownsbergerShare" | "brownsberger" | "lander" | "margin";
+type SortDirection = "asc" | "desc";
 
 const CITY_CODES: Record<string, string> = {
   BOSTON: "BOS",
@@ -401,6 +403,7 @@ function App() {
   const [selectedId, setSelectedId] = useState("");
   const [query, setQuery] = useState("");
   const [showAllRows, setShowAllRows] = useState(false);
+  const [sort, setSort] = useState<{ key: SortKey; direction: SortDirection }>({ key: "precinct", direction: "asc" });
 
   const totals = useMemo(
     () =>
@@ -445,6 +448,48 @@ function App() {
     });
   }, [rows, city, query]);
 
+  const sortedRows = useMemo(() => {
+    const valueFor = (row: ResultRow): string | number => {
+      switch (sort.key) {
+        case "registered": return row.registered_voters;
+        case "turnout": return row.registered_voters ? row.ballots_cast_total / row.registered_voters : 0;
+        case "brownsbergerShare": return brownsbergerShare(row);
+        case "brownsberger": return row.brownsberger_votes;
+        case "lander": return row.lander_votes;
+        case "margin": return Math.abs(row.brownsberger_votes - row.lander_votes);
+        default: return precinctLabel(row);
+      }
+    };
+
+    return [...filteredRows].sort((a, b) => {
+      const aValue = valueFor(a);
+      const bValue = valueFor(b);
+      const comparison = typeof aValue === "string" && typeof bValue === "string"
+        ? aValue.localeCompare(bValue, undefined, { numeric: true })
+        : Number(aValue) - Number(bValue);
+      return sort.direction === "asc" ? comparison : -comparison;
+    });
+  }, [filteredRows, sort]);
+
+  const requestSort = (key: SortKey) => {
+    setSort((current) => current.key === key
+      ? { key, direction: current.direction === "asc" ? "desc" : "asc" }
+      : { key, direction: key === "precinct" ? "asc" : "desc" });
+  };
+
+  const sortHeader = (key: SortKey, label: string, numeric = false) => {
+    const active = sort.key === key;
+    const ariaSort = active ? (sort.direction === "asc" ? "ascending" : "descending") : "none";
+    return (
+      <th className={numeric ? "numeric" : undefined} aria-sort={ariaSort}>
+        <button className={`sort-header${active ? " active" : ""}`} onClick={() => requestSort(key)}>
+          <span>{label}</span>
+          <span aria-hidden="true">{active ? (sort.direction === "asc" ? "↑" : "↓") : "↕"}</span>
+        </button>
+      </th>
+    );
+  };
+
   const candidateVotes = totals.brownsberger + totals.lander;
   if (error) {
     return <main className="loading-state"><p>{error}</p></main>;
@@ -468,6 +513,7 @@ function App() {
         <nav aria-label="Page sections">
           <a href="#map">Map</a>
           <a href="#data">Data</a>
+          <a href="#context">Context</a>
           <a href="#sources">Sources</a>
         </nav>
         <a className="header-download" href="/assets/data/results.csv" download>
@@ -575,11 +621,15 @@ function App() {
             <div className="legend" aria-label="Map legend">
               {metric === "lead" ? (
                 <>
-                  <span className="candidate-key"><b style={{ background: BROWNSBERGER }}>B</b>Brownsberger lead</span>
-                  <span className="candidate-key"><b style={{ background: NEUTRAL, color: "#15232d" }}>≈</b>Within 1 point</span>
-                  <span className="candidate-key"><b style={{ background: LANDER }}>L</b>Lander lead</span>
+                  <div className="legend-thresholds" aria-label="Two-candidate percentage-point lead thresholds">
+                    <span className="candidate-key"><b style={{ background: BROWNSBERGER }}>B</b>B lead ≥10 pts</span>
+                    <span className="candidate-key"><b style={{ background: BROWNSBERGER_LIGHT, color: "#10212b" }}>B</b>B lead 1–9.9 pts</span>
+                    <span className="candidate-key"><b style={{ background: NEUTRAL, color: "#10212b" }}>≈</b>Within 1 pt</span>
+                    <span className="candidate-key"><b style={{ background: LANDER_LIGHT, color: "#10212b" }}>L</b>L lead 1–9.9 pts</span>
+                    <span className="candidate-key"><b style={{ background: LANDER }}>L</b>L lead ≥10 pts</span>
+                  </div>
                   <span className="turnout-size-legend"><i /><i /><i />Larger circle = higher turnout</span>
-                  <small>Dark fill marks a lead of 10 percentage points or more.</small>
+                  <small>Lead = percentage-point difference in the two-candidate vote.</small>
                 </>
               ) : (
                 <>
@@ -605,8 +655,9 @@ function App() {
                     <div className="city-title"><strong>{item.name}</strong><span>{item.precincts} precincts</span></div>
                     <div className="mini-bar"><span style={{ width: `${bShare}%`, background: BROWNSBERGER }} /><span style={{ width: `${100 - bShare}%`, background: LANDER }} /></div>
                     <div className="city-numbers">
-                      <span><i style={{ background: BROWNSBERGER }} />{number(item.brownsberger)}</span>
-                      <span><i style={{ background: LANDER }} />{number(item.lander)}</span>
+                      <span><i style={{ background: BROWNSBERGER }} />{number(item.brownsberger)} B votes</span>
+                      <span><i style={{ background: LANDER }} />{number(item.lander)} L votes</span>
+                      <span className="city-share">{percent(bShare)} Brownsberger</span>
                       <span>{percent((item.ballots / item.registered) * 100)} turnout</span>
                     </div>
                   </button>
@@ -647,26 +698,26 @@ function App() {
           <table>
             <thead>
               <tr>
-                <th>Precinct</th>
-                <th className="numeric">Registered</th>
-                <th className="numeric">Total turnout</th>
-                <th className="numeric">Brownsberger</th>
-                <th className="numeric">Brownsberger %</th>
-                <th className="numeric">Lander</th>
-                <th className="numeric">Two-candidate margin</th>
+                {sortHeader("precinct", "Precinct")}
+                {sortHeader("registered", "Registered", true)}
+                {sortHeader("turnout", "Total turnout", true)}
+                {sortHeader("brownsbergerShare", "Brownsberger %", true)}
+                {sortHeader("brownsberger", "Brownsberger", true)}
+                {sortHeader("lander", "Lander", true)}
+                {sortHeader("margin", "Two-candidate margin", true)}
                 <th>Status</th>
               </tr>
             </thead>
             <tbody>
-              {filteredRows.slice(0, showAllRows ? undefined : 12).map((row) => {
+              {sortedRows.slice(0, showAllRows ? undefined : 12).map((row) => {
                 const difference = row.brownsberger_votes - row.lander_votes;
                 return (
                   <tr key={row.id} onClick={() => { setSelectedId(row.id); document.querySelector("#map")?.scrollIntoView({ behavior: "smooth" }); }}>
                     <td><strong>{row.ward ? `Ward ${row.ward} · Pct. ${row.precinct}` : `Precinct ${row.precinct}`}</strong><span>{row.municipality}</span></td>
                     <td className="numeric">{number(row.registered_voters)}</td>
                     <td className="numeric"><strong>{percent((row.ballots_cast_total / row.registered_voters) * 100)}</strong><span>{number(row.ballots_cast_total)} ballots</span></td>
-                    <td className="numeric candidate-value brownsberger">{number(row.brownsberger_votes)}</td>
                     <td className="numeric"><strong>{percent(brownsbergerShare(row))}</strong><span>two-candidate share</span></td>
+                    <td className="numeric candidate-value brownsberger">{number(row.brownsberger_votes)}</td>
                     <td className="numeric candidate-value lander">{number(row.lander_votes)}</td>
                     <td className="numeric">{difference === 0 ? "Even" : `${difference > 0 ? "B" : "L"} +${Math.abs(difference)}`}</td>
                     <td><span className={`status-pill ${row.result_status.startsWith("official") ? "official" : "mixed"}`}>{row.result_status.startsWith("official") ? "Official" : "Boston precinct file"}</span></td>
@@ -681,10 +732,46 @@ function App() {
         ) : null}
       </section>
 
+      <section className="context-section" id="context">
+        <div className="section-heading">
+          <div>
+            <p className="section-number">03 / ADD CONTEXT</p>
+            <h2>Demographics and primary participation</h2>
+            <p>Official sources can add context, but Census geographies and election precincts must be matched carefully.</p>
+          </div>
+        </div>
+
+        <div className="context-grid">
+          <article>
+            <span className="context-label">Census profiles</span>
+            <h3>Social and economic context</h3>
+            <p>The 2020–2024 ACS 5-year data covers income, education, housing, age, race, and other characteristics at tract and block-group levels.</p>
+            <a href="https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/" target="_blank" rel="noreferrer">Open ACS data profiles <ExternalIcon /></a>
+          </article>
+          <article>
+            <span className="context-label">Voting-age population</span>
+            <h3>Citizen voting-age population</h3>
+            <p>The Census Bureau&apos;s 2020–2024 CVAP file provides race and ethnicity estimates for tracts, block groups, and legislative districts.</p>
+            <a href="https://www.census.gov/programs-surveys/decennial-census/about/voting-rights/cvap/2020-2024-CVAP.html" target="_blank" rel="noreferrer">Open the CVAP dataset <ExternalIcon /></a>
+          </article>
+          <article>
+            <span className="context-label">Primary voter enrollment</span>
+            <h3>{number(totals.demBallots)} Democratic ballots in the mapped file</h3>
+            <p>Published returns do not split these voters into registered Democrats versus unenrolled voters. State registration statistics show the eligible party mix; marked primary lists are needed to measure who participated. Publish only precinct aggregates, not voter names.</p>
+            <div className="context-links">
+              <a href="https://www.sec.state.ma.us/divisions/elections/research-and-statistics/statistics-hub.htm" target="_blank" rel="noreferrer">Enrollment data <ExternalIcon /></a>
+              <a href="https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section37" target="_blank" rel="noreferrer">Marked-list law <ExternalIcon /></a>
+              <a href="https://www.sec.state.ma.us/divisions/elections/voting-information/vote-primary.htm" target="_blank" rel="noreferrer">Primary rules <ExternalIcon /></a>
+            </div>
+          </article>
+        </div>
+        <p className="context-caution"><InfoIcon /><span><strong>Why no precinct demographic numbers yet?</strong> The dashboard uses 2022 Massachusetts precinct boundaries, while ACS estimates are published for Census tracts and block groups. A defensible precinct estimate needs a documented population-weighted crosswalk and should retain Census margins of error.</span></p>
+      </section>
+
       <section className="source-section" id="sources">
         <div className="section-heading">
           <div>
-            <p className="section-number">03 / VERIFY</p>
+            <p className="section-number">04 / VERIFY</p>
             <h2>Sources &amp; methodology</h2>
             <p>Every result and boundary source used by the dashboard is linked below.</p>
           </div>
