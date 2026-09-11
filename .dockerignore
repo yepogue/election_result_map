@@ -1,0 +1,11 @@
+node_modules
+dist
+public/assets/data
+.git
+.wrangler
+.next
+coverage
+*.log
+.env
+.env.*
+!.env.example

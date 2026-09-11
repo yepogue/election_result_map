@@ -1,0 +1,79 @@
+[
+  {
+    "municipality": "Boston",
+    "title": "Amended unofficial Suffolk & Middlesex precinct results",
+    "url": "https://search.boston.gov/sites/default/files/file/2026/09/2026-09-01-DEM-Senator-in-General-Court-Suffolk-and-Middlesex-District-Amended-Unofficial-Results.pdf",
+    "status": "Precinct detail; amended September 3, 2026",
+    "usedFor": "Candidate votes and Democratic ballots cast"
+  },
+  {
+    "municipality": "Boston",
+    "title": "2026 State Primary precinct breakdown",
+    "url": "https://search.boston.gov/sites/default/files/file/2026/09/2026-09-01-Unofficial-State-Primary-Precinct-Breakdown-Results.pdf",
+    "status": "Precinct detail; published September 2, 2026",
+    "usedFor": "Registered voters and Republican ballots used in total turnout"
+  },
+  {
+    "municipality": "Boston",
+    "title": "2026 State Primary official results",
+    "url": "https://search.boston.gov/sites/default/files/file/2026/09/2026-09-01%20-%20State%20Primary%20Official%20Results.pdf",
+    "status": "Official municipal totals",
+    "usedFor": "Cross-check of Boston candidate totals"
+  },
+  {
+    "municipality": "Cambridge",
+    "title": "September 1, 2026 State Primary official Democratic results",
+    "url": "https://www.cambridgema.gov/-/media/Files/electioncommission/2026stateprimary/officialresultsdemocrat20260901.pdf",
+    "status": "Official",
+    "usedFor": "Candidate votes and Democratic ballots cast"
+  },
+  {
+    "municipality": "Cambridge",
+    "title": "Official turnout by ward and precinct",
+    "url": "https://www.cambridgema.gov/-/media/Files/electioncommission/2026stateprimary/september2026turnout.pdf",
+    "status": "Official",
+    "usedFor": "Registered voters and total ballots cast"
+  },
+  {
+    "municipality": "Watertown",
+    "title": "Official results — State Primary, September 1, 2026",
+    "url": "https://content.civicplus.com/api/assets/ma-watertown/6dc5d48b-cd98-40dc-8925-3fb211bbae16?cache=1800",
+    "status": "Official",
+    "usedFor": "Candidate votes, registration, and turnout"
+  },
+  {
+    "municipality": "Belmont",
+    "title": "State Primary official results",
+    "url": "https://www.belmont-ma.gov/DocumentCenter/View/15372",
+    "status": "Official pre-recount results",
+    "usedFor": "Candidate votes, registration, and turnout"
+  },
+  {
+    "municipality": "District",
+    "title": "2022 Massachusetts Senatorial Districts",
+    "url": "https://www.sec.state.ma.us/divisions/elections/voting-information/district/2022-senatorial.htm",
+    "status": "Official district definition",
+    "usedFor": "Precincts included in the Suffolk and Middlesex district"
+  },
+  {
+    "municipality": "Boundaries",
+    "title": "MassGIS Wards and Precincts 2022 feature service",
+    "url": "https://arcgisserver.digital.mass.gov/arcgisserver/rest/services/AGOL/WardsPrecincts2022/FeatureServer/0",
+    "status": "Official public GIS service",
+    "usedFor": "Precinct boundaries"
+  },
+  {
+    "municipality": "Recount",
+    "title": "Boston Election Department recount notice",
+    "url": "https://search.boston.gov/news/boston-election-department-completes-recount-middlesex-and-suffolk-senate-district-election",
+    "status": "Official Boston recount notice",
+    "usedFor": "Boston recount total and recount completion status"
+  },
+  {
+    "municipality": "Recount reporting",
+    "title": "Brownsberger wins districtwide recount by 35 votes",
+    "url": "https://www.axios.com/local/boston/2026/09/10/senate-recount-brownsberger-lander-massachusetts",
+    "status": "State House News Service reporting via Axios",
+    "usedFor": "Districtwide post-recount margin; not used to allocate precinct votes"
+  }
+]
