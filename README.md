@@ -13,8 +13,9 @@ An interactive, source-linked precinct map for the September 1, 2026 Democratic 
 - Downloadable CSV results and GeoJSON boundaries.
 - Direct links to the original municipal election files and state boundary sources.
 - Census ACS/CVAP context links and a documented path for obtaining aggregate primary-voter enrollment splits.
+- A plain-language change log at the bottom of the published dashboard.
 
-The final totals come from the Secretary of the Commonwealth's certified results database. The mapped vote totals are the published precinct snapshot assembled from the four municipalities; the site does not treat districtwide recount changes as precinct-level data.
+The headline, map, table, and municipal totals all use the Secretary of the Commonwealth's certified post-recount precinct export. Registration and overall election turnout remain sourced from municipal precinct reports.
 
 ## Update the data
 
@@ -22,8 +23,9 @@ The final totals come from the Secretary of the Commonwealth's certified results
 2. Keep the header row and precinct IDs unchanged.
 3. Replace the numbers or add corrected rows.
 4. Update final district totals, status, and dates in `public/data/election.json`.
-5. Export the sheet as a UTF-8 CSV with the same filename.
-6. Run the validation and build commands below.
+5. Add a plain-language release note to `public/data/changelog.json`.
+6. Export the sheet as a UTF-8 CSV with the same filename.
+7. Run the validation and build commands below.
 
 See `MAINTENANCE.md` for the field definitions, expected totals, and a release checklist.
 

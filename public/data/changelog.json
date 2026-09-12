@@ -1,0 +1,20 @@
+[
+  {
+    "date": "September 11, 2026",
+    "title": "Certified post-recount precinct results",
+    "items": [
+      "Replaced all 59 pre-recount contest rows with the Secretary of the Commonwealth's post-recount precinct export.",
+      "Reconciled the map, table, municipal totals, and headline to 12,293 Brownsberger votes and 12,258 Lander votes.",
+      "Updated other or write-in, blank, and Democratic contest-ballot counts where the hand recount changed them."
+    ]
+  },
+  {
+    "date": "September 11, 2026",
+    "title": "Analysis and accessibility improvements",
+    "items": [
+      "Added two-way table sorting and moved Brownsberger percentage before vote count.",
+      "Clarified the result-map thresholds and added a turnout-only map view.",
+      "Added municipal Brownsberger percentages plus Census and primary-participation research links."
+    ]
+  }
+]

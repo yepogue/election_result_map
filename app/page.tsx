@@ -25,6 +25,12 @@ type Source = {
   usedFor: string;
 };
 
+type ChangeLogEntry = {
+  date: string;
+  title: string;
+  items: string[];
+};
+
 type ElectionMeta = {
   dashboard_updated: string;
   status: string;
@@ -140,6 +146,7 @@ function useDashboardData() {
   const [geo, setGeo] = useState<FeatureCollection | null>(null);
   const [sources, setSources] = useState<Source[]>([]);
   const [election, setElection] = useState<ElectionMeta | null>(null);
+  const [changelog, setChangelog] = useState<ChangeLogEntry[]>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -148,17 +155,19 @@ function useDashboardData() {
       fetch("/assets/data/district-precincts.geojson").then((response) => response.json()),
       fetch("/assets/data/sources.json").then((response) => response.json()),
       fetch("/assets/data/election.json").then((response) => response.json()),
+      fetch("/assets/data/changelog.json").then((response) => response.json()),
     ])
-      .then(([csv, geography, sourceList, electionMeta]) => {
+      .then(([csv, geography, sourceList, electionMeta, changeLogEntries]) => {
         setRows(parseCsv(csv));
         setGeo(geography as FeatureCollection);
         setSources(sourceList as Source[]);
         setElection(electionMeta as ElectionMeta);
+        setChangelog(changeLogEntries as ChangeLogEntry[]);
       })
       .catch(() => setError("The dashboard data could not be loaded."));
   }, []);
 
-  return { rows, geo, sources, election, error };
+  return { rows, geo, sources, election, changelog, error };
 }
 
 function DownloadIcon() {
@@ -397,7 +406,7 @@ function ElectionMap({
 }
 
 function App() {
-  const { rows, geo, sources, election, error } = useDashboardData();
+  const { rows, geo, sources, election, changelog, error } = useDashboardData();
   const [city, setCity] = useState("All");
   const [metric, setMetric] = useState<Metric>("lead");
   const [selectedId, setSelectedId] = useState("");
@@ -666,7 +675,7 @@ function App() {
             </div>
             <div className="status-key">
               <InfoIcon />
-              <p><strong>Reading the status.</strong> Belmont, Cambridge, and Watertown publish official precinct returns. Boston&apos;s mapped precinct rows are its amended file, cross-checked to Boston&apos;s official municipal totals.</p>
+              <p><strong>Certified recount snapshot.</strong> All 59 contest rows come from the Secretary of the Commonwealth&apos;s post-recount precinct export. Registration and total-turnout fields come from the municipalities&apos; election-wide precinct reports.</p>
             </div>
           </aside>
         </div>
@@ -677,7 +686,7 @@ function App() {
           <div>
             <p className="section-number">02 / INSPECT</p>
             <h2>Precinct data</h2>
-            <p>Search the published rows or download the complete machine-readable dataset.</p>
+            <p>Search the certified post-recount rows or download the complete machine-readable dataset.</p>
           </div>
           <div className="download-group">
             <a className="download-primary" href="/assets/data/results.csv" download><DownloadIcon />Results CSV</a>
@@ -785,7 +794,7 @@ function App() {
             <span>2</span><div><strong>Use total primary turnout</strong><p>Turnout is total Democratic and Republican ballots divided by registered voters.</p></div>
           </article>
           <article>
-            <span>3</span><div><strong>Separate final totals from precinct detail</strong><p>The recount total is shown at the top, while the map preserves the published precinct rows so no recount changes are assigned to the wrong precinct.</p></div>
+            <span>3</span><div><strong>Reconcile every precinct</strong><p>The Secretary&apos;s post-recount precinct export sums exactly to the final district result and drives the headline, map, table, and municipal totals.</p></div>
           </article>
         </div>
 
@@ -805,13 +814,34 @@ function App() {
         <div>
           <p className="section-number">BUILT FOR HANDOFF</p>
           <h2>Update it without touching the code.</h2>
-          <p>The dashboard reads four plain data files. Election staff can update results in Excel and edit the small election summary file in any text editor.</p>
+          <p>The dashboard reads five plain data files. Election staff can update results in Excel and edit the small summary, source, and change-log files in any text editor.</p>
         </div>
         <ol>
           <li><span>01</span><div><strong>Update results.csv</strong><p>One row per precinct; keep the column names unchanged.</p></div></li>
-          <li><span>02</span><div><strong>Update election.json and sources.json</strong><p>Change final totals, status text, dates, and source links without editing the application code.</p></div></li>
+          <li><span>02</span><div><strong>Update the small JSON files</strong><p>Change final totals, source links, dates, and public change notes without editing the application code.</p></div></li>
           <li><span>03</span><div><strong>Republish</strong><p>Run the documented build command. Boundaries only change after redistricting.</p></div></li>
         </ol>
+      </section>
+
+      <section className="changelog-section" id="changelog">
+        <div className="changelog-heading">
+          <p className="section-number">LATEST UPDATES</p>
+          <h2>Change log</h2>
+          <p>A plain-language record of changes to the published dashboard and its data.</p>
+        </div>
+        <div className="changelog-list">
+          {changelog.map((entry, index) => (
+            <article key={`${entry.date}-${entry.title}-${index}`}>
+              <time>{entry.date}</time>
+              <div>
+                <h3>{entry.title}</h3>
+                <ul>
+                  {entry.items.map((item) => <li key={item}>{item}</li>)}
+                </ul>
+              </div>
+            </article>
+          ))}
+        </div>
       </section>
 
       <footer>

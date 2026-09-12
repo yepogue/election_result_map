@@ -1,52 +1,66 @@
 [
   {
+    "municipality": "District",
+    "title": "Secretary of the Commonwealth post-recount precinct export",
+    "url": "https://electionstats.state.ma.us/elections/download/173087/precincts_include:1/",
+    "status": "Official post-recount precinct export",
+    "usedFor": "Final candidate, other or write-in, blank, and Democratic contest-ballot counts for all 59 precincts"
+  },
+  {
+    "municipality": "Final result",
+    "title": "Secretary of the Commonwealth certified 2026 State Primary results",
+    "url": "https://electionstats.state.ma.us/elections/search/date:2026-09-01",
+    "status": "Official statewide results database",
+    "usedFor": "Certified result: Brownsberger 12,293; Lander 12,258; all others 18; blanks 1,080"
+  },
+  {
     "municipality": "Boston",
-    "title": "Amended unofficial Suffolk & Middlesex precinct results",
-    "url": "https://search.boston.gov/sites/default/files/file/2026/09/2026-09-01-DEM-Senator-in-General-Court-Suffolk-and-Middlesex-District-Amended-Unofficial-Results.pdf",
-    "status": "Precinct detail; amended September 3, 2026",
-    "usedFor": "Candidate votes and Democratic ballots cast"
+    "title": "Boston Election Department completes district recount",
+    "url": "https://www.boston.gov/news/boston-election-department-completes-recount-suffolk-and-middlesex-senate-district-election",
+    "status": "Official; certified September 9, 2026",
+    "usedFor": "Recount completion and Boston post-recount municipal totals"
+  },
+  {
+    "municipality": "Cambridge",
+    "title": "Recount results by ward and precinct",
+    "url": "https://www.cambridgema.gov/-/media/Files/electioncommission/2026stateprimary/recountresultsbywardprecinct20260910.pdf",
+    "status": "Official post-recount results",
+    "usedFor": "Independent precinct-level check of the Secretary's Cambridge rows"
+  },
+  {
+    "municipality": "Belmont",
+    "title": "Official Democratic Senate recount results",
+    "url": "https://www.belmont-ma.gov/DocumentCenter/View/15428/2026-09-01-State-Primary-Belmont-Official-Democrat-Senate-in-Gen-Court-Recount-Results-PDF",
+    "status": "Official post-recount results",
+    "usedFor": "Independent precinct-level check of the Secretary's Belmont rows"
   },
   {
     "municipality": "Boston",
     "title": "2026 State Primary precinct breakdown",
     "url": "https://search.boston.gov/sites/default/files/file/2026/09/2026-09-01-Unofficial-State-Primary-Precinct-Breakdown-Results.pdf",
-    "status": "Precinct detail; published September 2, 2026",
-    "usedFor": "Registered voters and Republican ballots used in total turnout"
-  },
-  {
-    "municipality": "Boston",
-    "title": "2026 State Primary official results",
-    "url": "https://search.boston.gov/sites/default/files/file/2026/09/2026-09-01%20-%20State%20Primary%20Official%20Results.pdf",
-    "status": "Official municipal totals",
-    "usedFor": "Cross-check of Boston candidate totals"
-  },
-  {
-    "municipality": "Cambridge",
-    "title": "September 1, 2026 State Primary official Democratic results",
-    "url": "https://www.cambridgema.gov/-/media/Files/electioncommission/2026stateprimary/officialresultsdemocrat20260901.pdf",
-    "status": "Official",
-    "usedFor": "Candidate votes and Democratic ballots cast"
+    "status": "Municipal election-wide precinct report",
+    "usedFor": "Registered voters and Republican ballots used in total-turnout fields"
   },
   {
     "municipality": "Cambridge",
     "title": "Official turnout by ward and precinct",
     "url": "https://www.cambridgema.gov/-/media/Files/electioncommission/2026stateprimary/september2026turnout.pdf",
-    "status": "Official",
+    "status": "Official election-wide turnout",
     "usedFor": "Registered voters and total ballots cast"
   },
   {
     "municipality": "Watertown",
     "title": "Official results — State Primary, September 1, 2026",
     "url": "https://content.civicplus.com/api/assets/ma-watertown/6dc5d48b-cd98-40dc-8925-3fb211bbae16?cache=1800",
-    "status": "Official",
-    "usedFor": "Candidate votes, registration, and turnout"
+    "status": "Official election-wide precinct report",
+    "usedFor": "Registered voters and total ballots cast; contest results retained for audit comparison"
   },
   {
     "municipality": "Belmont",
     "title": "State Primary official results",
     "url": "https://www.belmont-ma.gov/DocumentCenter/View/15372",
-    "status": "Official pre-recount results",
-    "usedFor": "Candidate votes, registration, and turnout"
+    "status": "Official election-wide precinct report",
+    "usedFor": "Registered voters and total ballots cast; contest results retained for audit comparison"
   },
   {
     "municipality": "District",
@@ -61,27 +75,6 @@
     "url": "https://arcgisserver.digital.mass.gov/arcgisserver/rest/services/AGOL/WardsPrecincts2022/FeatureServer/0",
     "status": "Official public GIS service",
     "usedFor": "Precinct boundaries"
-  },
-  {
-    "municipality": "Recount",
-    "title": "Boston Election Department certified recount result",
-    "url": "https://search.boston.gov/news/boston-election-department-completes-recount-middlesex-and-suffolk-senate-district-election",
-    "status": "Official; certified September 9, 2026",
-    "usedFor": "Boston recount totals and recount completion status"
-  },
-  {
-    "municipality": "Final result",
-    "title": "Secretary of the Commonwealth certified 2026 State Primary results",
-    "url": "https://electionstats.state.ma.us/elections/search/date:2026-09-01",
-    "status": "Official statewide results database",
-    "usedFor": "Final recount totals: Brownsberger 12,293; Lander 12,258; all others 18; blanks 1,080"
-  },
-  {
-    "municipality": "Recount reporting",
-    "title": "Final districtwide recount coverage",
-    "url": "https://www.wcvb.com/article/suffolk-middlesex-senate-race-recount-results-lander-brownsberger/73674075",
-    "status": "Secondary confirmation",
-    "usedFor": "Recount completion and 35-vote margin"
   },
   {
     "municipality": "Census",

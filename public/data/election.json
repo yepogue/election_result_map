@@ -1,10 +1,10 @@
 {
   "dashboard_updated": "September 11, 2026",
-  "status": "Districtwide recount complete",
+  "status": "Certified districtwide recount",
   "recount_completed": "September 10, 2026",
   "brownsberger_votes": 12293,
   "lander_votes": 12258,
   "margin": 35,
-  "precinct_data_label": "Published pre-recount precinct snapshot",
-  "note": "The Secretary of the Commonwealth's certified statewide database now reports these final totals. Its municipality and precinct detail remains the published pre-recount canvass, so the map and table keep that snapshot rather than assigning recount changes to the wrong precinct."
+  "precinct_data_label": "Certified post-recount precinct results",
+  "note": "The map, table, municipal totals, and districtwide headline use the Secretary of the Commonwealth's post-recount precinct export. Registration and overall turnout remain sourced from the municipalities' election-wide reports."
 }

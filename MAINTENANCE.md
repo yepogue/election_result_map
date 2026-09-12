@@ -7,6 +7,7 @@ This site is deliberately file-based. Routine election corrections do not requir
 - `public/data/results.csv` — the precinct-level values shown on the map and in the table.
 - `public/data/election.json` — the final districtwide totals, status, dates, and explanatory note shown at the top.
 - `public/data/sources.json` — source titles, URLs, status labels, and notes.
+- `public/data/changelog.json` — dated, plain-language notes shown at the bottom of the site.
 - `public/data/district-precincts.geojson` — official boundary geometry. Replace only when MassGIS publishes a newer applicable district geography.
 
 ## Results CSV data dictionary
@@ -28,30 +29,31 @@ This site is deliberately file-based. Routine election corrections do not requir
 
 ## Release checklist
 
-1. Download the newest official results from each municipality.
+1. Download the newest official precinct export from the Secretary of the Commonwealth and retain municipal files for turnout fields and cross-checks.
 2. Update `results.csv` without changing the precinct IDs.
 3. Update `election.json` when the districtwide total, recount status, date, or note changes.
 4. Update `sources.json` if a source URL, certification status, or note changed.
-5. Confirm there are exactly 59 result rows and 59 matching map features.
-6. Confirm every numeric field is a whole number and no value is negative.
-7. Confirm each row satisfies: candidate votes + other votes + blank votes = Democratic ballots cast.
-8. Confirm the displayed aggregate totals against the source documents.
-9. Run `npm run lint` and `npm run build`.
-10. Check the map, downloads, source links, and a narrow mobile viewport before publishing.
-11. Check that table sort buttons work in both directions and that the map legend matches the fill thresholds in the code.
+5. Add a dated public note to `changelog.json`.
+6. Confirm there are exactly 59 result rows and 59 matching map features.
+7. Confirm every numeric field is a whole number and no value is negative.
+8. Confirm each row satisfies: candidate votes + other votes + blank votes = Democratic ballots cast.
+9. Confirm the displayed aggregate totals against the source documents.
+10. Run `npm run lint` and `npm run build`.
+11. Check the map, downloads, source links, change log, and a narrow mobile viewport before publishing.
+12. Check that table sort buttons work in both directions and that the map legend matches the fill thresholds in the code.
 
 ## Current published-snapshot checks
 
 - Final districtwide recount: Brownsberger 12,293 / Lander 12,258 (35-vote margin)
-- Mapped pre-recount precinct snapshot: Brownsberger 12,291 / Lander 12,257
-- Belmont: 4,010 / 1,809
-- Boston: 3,373 / 5,135
+- Mapped post-recount precinct snapshot: Brownsberger 12,293 / Lander 12,258
+- Belmont: 4,012 / 1,812
+- Boston: 3,369 / 5,131
 - Cambridge: 1,614 / 1,862
-- Watertown: 3,294 / 3,451
+- Watertown: 3,298 / 3,453
 
-The pair on each municipality line is Brownsberger / Lander. Boston's precinct candidate counts use the city's amended district-contest file; registration and total-turnout fields use the city's full precinct breakdown. The dashboard labels that distinction and links both files.
+The pair on each municipality line is Brownsberger / Lander. The Secretary's post-recount export supplies contest counts for every precinct. Municipal precinct reports supply registered-voter and overall-turnout fields and remain linked for audit comparison.
 
-The Secretary of the Commonwealth's certified search results report the final districtwide recount totals. Its municipality and precinct detail page still shows the pre-recount canvass, which is why the map totals differ from the final headline.
+The Secretary of the Commonwealth's downloadable precinct file is the controlling post-recount snapshot. Its browser-rendered municipality detail may update on a different schedule, so maintainers should validate and archive the downloadable file used for each release.
 
 ## Demographic and primary-voter context
 

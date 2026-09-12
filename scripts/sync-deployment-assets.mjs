@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sourceDir = join(projectRoot, "public", "data");
 const targetDir = join(projectRoot, "public", "assets", "data");
-const files = ["results.csv", "district-precincts.geojson", "sources.json", "election.json"];
+const files = ["results.csv", "district-precincts.geojson", "sources.json", "election.json", "changelog.json"];
 
 mkdirSync(targetDir, { recursive: true });
 
