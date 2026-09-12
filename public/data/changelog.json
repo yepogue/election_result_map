@@ -5,7 +5,8 @@
     "items": [
       "Replaced all 59 pre-recount contest rows with the Secretary of the Commonwealth's post-recount precinct export.",
       "Reconciled the map, table, municipal totals, and headline to 12,293 Brownsberger votes and 12,258 Lander votes.",
-      "Updated other or write-in, blank, and Democratic contest-ballot counts where the hand recount changed them."
+      "Updated other or write-in, blank, and Democratic contest-ballot counts where the hand recount changed them.",
+      "Made each published data update bypass older cached snapshots after the site is republished."
     ]
   },
   {

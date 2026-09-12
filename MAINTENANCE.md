@@ -5,7 +5,7 @@ This site is deliberately file-based. Routine election corrections do not requir
 ## Files a maintainer may update
 
 - `public/data/results.csv` — the precinct-level values shown on the map and in the table.
-- `public/data/election.json` — the final districtwide totals, status, dates, and explanatory note shown at the top.
+- `public/data/election.json` — the data-version label, final districtwide totals, status, dates, and explanatory note shown at the top.
 - `public/data/sources.json` — source titles, URLs, status labels, and notes.
 - `public/data/changelog.json` — dated, plain-language notes shown at the bottom of the site.
 - `public/data/district-precincts.geojson` — official boundary geometry. Replace only when MassGIS publishes a newer applicable district geography.
@@ -32,6 +32,7 @@ This site is deliberately file-based. Routine election corrections do not requir
 1. Download the newest official precinct export from the Secretary of the Commonwealth and retain municipal files for turnout fields and cross-checks.
 2. Update `results.csv` without changing the precinct IDs.
 3. Update `election.json` when the districtwide total, recount status, date, or note changes.
+   Give `data_version` a new short value for every published release so visitors do not receive an older cached snapshot.
 4. Update `sources.json` if a source URL, certification status, or note changed.
 5. Add a dated public note to `changelog.json`.
 6. Confirm there are exactly 59 result rows and 59 matching map features.

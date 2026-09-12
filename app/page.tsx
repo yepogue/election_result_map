@@ -32,6 +32,7 @@ type ChangeLogEntry = {
 };
 
 type ElectionMeta = {
+  data_version: string;
   dashboard_updated: string;
   status: string;
   recount_completed: string;
@@ -150,21 +151,25 @@ function useDashboardData() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    Promise.all([
-      fetch("/assets/data/results.csv").then((response) => response.text()),
-      fetch("/assets/data/district-precincts.geojson").then((response) => response.json()),
-      fetch("/assets/data/sources.json").then((response) => response.json()),
-      fetch("/assets/data/election.json").then((response) => response.json()),
-      fetch("/assets/data/changelog.json").then((response) => response.json()),
-    ])
-      .then(([csv, geography, sourceList, electionMeta, changeLogEntries]) => {
+    const loadData = async () => {
+      const electionMeta = await fetch("/assets/data/election.json", { cache: "no-store" })
+        .then((response) => response.json()) as ElectionMeta;
+      const version = encodeURIComponent(electionMeta.data_version);
+      const [csv, geography, sourceList, changeLogEntries] = await Promise.all([
+        fetch(`/assets/data/results.csv?v=${version}`, { cache: "no-store" }).then((response) => response.text()),
+        fetch(`/assets/data/district-precincts.geojson?v=${version}`, { cache: "no-store" }).then((response) => response.json()),
+        fetch(`/assets/data/sources.json?v=${version}`, { cache: "no-store" }).then((response) => response.json()),
+        fetch(`/assets/data/changelog.json?v=${version}`, { cache: "no-store" }).then((response) => response.json()),
+      ]);
+
         setRows(parseCsv(csv));
         setGeo(geography as FeatureCollection);
         setSources(sourceList as Source[]);
         setElection(electionMeta as ElectionMeta);
         setChangelog(changeLogEntries as ChangeLogEntry[]);
-      })
-      .catch(() => setError("The dashboard data could not be loaded."));
+    };
+
+    loadData().catch(() => setError("The dashboard data could not be loaded."));
   }, []);
 
   return { rows, geo, sources, election, changelog, error };
@@ -511,6 +516,7 @@ function App() {
   const finalCandidateVotes = election.brownsberger_votes + election.lander_votes;
   const finalBrownsbergerShare = (election.brownsberger_votes / finalCandidateVotes) * 100;
   const finalLanderShare = (election.lander_votes / finalCandidateVotes) * 100;
+  const dataVersion = encodeURIComponent(election.data_version);
 
   return (
     <main>
@@ -525,7 +531,7 @@ function App() {
           <a href="#context">Context</a>
           <a href="#sources">Sources</a>
         </nav>
-        <a className="header-download" href="/assets/data/results.csv" download>
+        <a className="header-download" href={`/assets/data/results.csv?v=${dataVersion}`} download>
           <DownloadIcon /> Download data
         </a>
       </header>
@@ -689,8 +695,8 @@ function App() {
             <p>Search the certified post-recount rows or download the complete machine-readable dataset.</p>
           </div>
           <div className="download-group">
-            <a className="download-primary" href="/assets/data/results.csv" download><DownloadIcon />Results CSV</a>
-            <a className="download-secondary" href="/assets/data/district-precincts.geojson" download><DownloadIcon />Boundaries</a>
+            <a className="download-primary" href={`/assets/data/results.csv?v=${dataVersion}`} download><DownloadIcon />Results CSV</a>
+            <a className="download-secondary" href={`/assets/data/district-precincts.geojson?v=${dataVersion}`} download><DownloadIcon />Boundaries</a>
           </div>
         </div>
 
