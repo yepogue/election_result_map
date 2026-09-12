@@ -1,0 +1,71 @@
+{
+  "datasetVersion": "1.0",
+  "generatedAtUtc": "2026-09-12T01:10:22+00:00",
+  "geographyVintage": {
+    "censusBlocks": "2020 Census",
+    "precincts": "MassGIS Wards and Precincts 2022",
+    "acs": "2020-2024 ACS 5-year"
+  },
+  "accuracyTiers": {
+    "direct": "2020 population and housing units are whole-block counts aggregated after geographic assignment.",
+    "modeled": "ACS block-group counts are allocated with 2020 block population or housing-unit weights. Percentages are ratios of allocated estimates.",
+    "notIncluded": "The files do not infer individual behavior, party registration, or who voted."
+  },
+  "sources": [
+    {
+      "name": "2020 Census TIGERweb Census Blocks",
+      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/10",
+      "use": "Block geometry, population, housing units, and land area"
+    },
+    {
+      "name": "2020 Census TIGERweb Block Groups",
+      "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/8",
+      "use": "Whole-block-group denominators and geometry"
+    },
+    {
+      "name": "MassGIS Wards and Precincts 2022",
+      "url": "https://arcgisserver.digital.mass.gov/arcgisserver/rest/services/AGOL/WardsPrecincts2022/FeatureServer/0",
+      "use": "Precinct geometry and published 2020 precinct population check"
+    },
+    {
+      "name": "2020-2024 American Community Survey 5-year",
+      "url": "https://www.census.gov/data/developers/data-sets/acs-5year/2024.html",
+      "retrievedVia": "Census Reporter API",
+      "retrievalUrl": "https://api.censusreporter.org/1.0/data/show/acs2024_5yr",
+      "releaseMetadata": {
+        "id": "acs2024_5yr",
+        "name": "ACS 2024 5-year",
+        "years": "2020-2024"
+      },
+      "use": "Block-group demographic, social, economic, and housing estimates"
+    }
+  ],
+  "files": {
+    "census_block_to_precinct.csv": {
+      "grain": "One row per 2020 Census block assigned to a district precinct",
+      "importantFields": {
+        "population_2020": "Direct 2020 Census whole-block population count",
+        "housing_units_2020": "Direct 2020 Census whole-block housing-unit count",
+        "overlap_pct_of_block": "Share of block polygon area inside assigned precinct",
+        "boundary_review_flag": "TRUE when overlap is below 95%"
+      }
+    },
+    "census_block_group_precinct_crosswalk.csv": {
+      "grain": "One block-group/precinct contribution",
+      "importantFields": {
+        "person_weight": "Allocated block population / whole block-group population",
+        "household_weight": "Allocated block housing units / whole block-group housing units",
+        "district_person_weight_share": "Sum of person weights entering all district precincts"
+      }
+    },
+    "precinct_demographics.csv": {
+      "grain": "One row per election-dashboard precinct",
+      "importantFields": {
+        "population_2020": "Direct block aggregation",
+        "*_est": "Modeled ACS estimate allocated from block groups",
+        "*_moe": "ACS sampling margin of error combined by root-sum-of-squares; allocation-model error is additional and not measured",
+        "*_pct": "Ratio of allocated ACS estimates; no separate modeled margin of error is claimed"
+      }
+    }
+  }
+}

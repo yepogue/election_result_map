@@ -17,6 +17,35 @@ type ResultRow = {
   result_status: string;
 };
 
+type DemographicRow = {
+  precinct_id: string;
+  municipality: string;
+  ward: string;
+  precinct: string;
+  population_2020: number;
+  housing_units_2020: number;
+  acs_population_est: number;
+  acs_age_18_34_est: number;
+  acs_age_18_34_pct: number;
+  acs_age_65_plus_est: number;
+  acs_age_65_plus_pct: number;
+  acs_bachelors_plus_est: number;
+  acs_education_age_25_plus_est: number;
+  acs_bachelors_plus_pct: number;
+  acs_hispanic_est: number;
+  acs_hispanic_pct: number;
+  acs_nonhispanic_black_est: number;
+  acs_nonhispanic_black_pct: number;
+  acs_nonhispanic_asian_est: number;
+  acs_nonhispanic_asian_pct: number;
+  acs_occupied_households_est: number;
+  acs_renter_households_est: number;
+  acs_renter_households_pct: number;
+  acs_income_households_est: number;
+  acs_households_income_below_50k_est: number;
+  acs_households_income_below_50k_pct: number;
+};
+
 type Source = {
   municipality: string;
   title: string;
@@ -65,7 +94,25 @@ type FeatureCollection = {
   features: PrecinctFeature[];
 };
 
-type Metric = "lead" | "turnout";
+type Metric = "lead" | "turnout" | "context";
+type ContextMetricKey =
+  | "youngAdults"
+  | "olderAdults"
+  | "collegeDegree"
+  | "renters"
+  | "incomeBelow50k"
+  | "hispanic"
+  | "black"
+  | "asian";
+type ContextMetricDefinition = {
+  id: ContextMetricKey;
+  label: string;
+  legendLabel: string;
+  description: string;
+  value: (row: DemographicRow) => number;
+  numerator: (row: DemographicRow) => number;
+  denominator: (row: DemographicRow) => number;
+};
 type SortKey = "precinct" | "registered" | "turnout" | "brownsbergerShare" | "brownsberger" | "lander" | "margin";
 type SortDirection = "asc" | "desc";
 
@@ -82,6 +129,82 @@ const BROWNSBERGER_LIGHT = "#8CC8E8";
 const LANDER = "#D55E00";
 const LANDER_LIGHT = "#F2B176";
 const NEUTRAL = "#D6DCE1";
+const CONTEXT_COLORS = ["#F4F1E6", "#CFE2DC", "#91BDB7", "#4D8584", "#174E53"];
+
+const CONTEXT_METRICS: ContextMetricDefinition[] = [
+  {
+    id: "youngAdults",
+    label: "Residents age 18–34",
+    legendLabel: "Age 18–34",
+    description: "Estimated share of residents age 18 to 34.",
+    value: (row) => row.acs_age_18_34_pct,
+    numerator: (row) => row.acs_age_18_34_est,
+    denominator: (row) => row.acs_population_est,
+  },
+  {
+    id: "olderAdults",
+    label: "Residents age 65+",
+    legendLabel: "Age 65+",
+    description: "Estimated share of residents age 65 or older.",
+    value: (row) => row.acs_age_65_plus_pct,
+    numerator: (row) => row.acs_age_65_plus_est,
+    denominator: (row) => row.acs_population_est,
+  },
+  {
+    id: "collegeDegree",
+    label: "Bachelor’s degree or higher",
+    legendLabel: "Bachelor’s degree+",
+    description: "Estimated share of residents age 25+ with a bachelor’s degree or higher.",
+    value: (row) => row.acs_bachelors_plus_pct,
+    numerator: (row) => row.acs_bachelors_plus_est,
+    denominator: (row) => row.acs_education_age_25_plus_est,
+  },
+  {
+    id: "renters",
+    label: "Renter households",
+    legendLabel: "Renter households",
+    description: "Estimated share of occupied households that rent.",
+    value: (row) => row.acs_renter_households_pct,
+    numerator: (row) => row.acs_renter_households_est,
+    denominator: (row) => row.acs_occupied_households_est,
+  },
+  {
+    id: "incomeBelow50k",
+    label: "Household income below $50k",
+    legendLabel: "Income below $50k",
+    description: "Estimated share of households with annual income below $50,000.",
+    value: (row) => row.acs_households_income_below_50k_pct,
+    numerator: (row) => row.acs_households_income_below_50k_est,
+    denominator: (row) => row.acs_income_households_est,
+  },
+  {
+    id: "hispanic",
+    label: "Hispanic residents",
+    legendLabel: "Hispanic",
+    description: "Estimated share of residents who identify as Hispanic or Latino.",
+    value: (row) => row.acs_hispanic_pct,
+    numerator: (row) => row.acs_hispanic_est,
+    denominator: (row) => row.acs_population_est,
+  },
+  {
+    id: "black",
+    label: "Non-Hispanic Black residents",
+    legendLabel: "Non-Hispanic Black",
+    description: "Estimated share of residents who are non-Hispanic and Black alone.",
+    value: (row) => row.acs_nonhispanic_black_pct,
+    numerator: (row) => row.acs_nonhispanic_black_est,
+    denominator: (row) => row.acs_population_est,
+  },
+  {
+    id: "asian",
+    label: "Non-Hispanic Asian residents",
+    legendLabel: "Non-Hispanic Asian",
+    description: "Estimated share of residents who are non-Hispanic and Asian alone.",
+    value: (row) => row.acs_nonhispanic_asian_pct,
+    numerator: (row) => row.acs_nonhispanic_asian_est,
+    denominator: (row) => row.acs_population_est,
+  },
+];
 
 function parseCsv(text: string): ResultRow[] {
   const [headerLine, ...lines] = text.trim().split(/\r?\n/);
@@ -108,6 +231,22 @@ function parseCsv(text: string): ResultRow[] {
   });
 }
 
+function parseDemographicCsv(text: string): DemographicRow[] {
+  const [headerLine, ...lines] = text.trim().split(/\r?\n/);
+  const headers = headerLine.split(",");
+  const textFields = new Set(["precinct_id", "municipality", "ward", "precinct"]);
+
+  return lines.map((line) => {
+    const values = line.split(",");
+    return Object.fromEntries(
+      headers.map((header, index) => [
+        header,
+        textFields.has(header) ? values[index] : Number(values[index]),
+      ]),
+    ) as DemographicRow;
+  });
+}
+
 function number(value: number) {
   return new Intl.NumberFormat("en-US").format(value);
 }
@@ -127,6 +266,44 @@ function brownsbergerShare(row: ResultRow) {
   return twoCandidateVotes ? (row.brownsberger_votes / twoCandidateVotes) * 100 : 0;
 }
 
+function activeContextMetric(key: ContextMetricKey) {
+  return CONTEXT_METRICS.find((metric) => metric.id === key) ?? CONTEXT_METRICS[0];
+}
+
+function quantile(values: number[], fraction: number) {
+  if (!values.length) return 0;
+  const position = (values.length - 1) * fraction;
+  const lower = Math.floor(position);
+  const upper = Math.ceil(position);
+  if (lower === upper) return values[lower];
+  return values[lower] + (values[upper] - values[lower]) * (position - lower);
+}
+
+function contextBreaks(rows: DemographicRow[], definition: ContextMetricDefinition) {
+  const values = rows
+    .map(definition.value)
+    .filter((value) => Number.isFinite(value))
+    .sort((a, b) => a - b);
+  return [0.2, 0.4, 0.6, 0.8].map((fraction) => quantile(values, fraction));
+}
+
+function contextFill(value: number, breaks: number[]) {
+  const bin = breaks.findIndex((breakpoint) => value <= breakpoint);
+  return CONTEXT_COLORS[bin === -1 ? CONTEXT_COLORS.length - 1 : bin];
+}
+
+function aggregateContext(rows: DemographicRow[], definition: ContextMetricDefinition) {
+  const numerator = rows.reduce((sum, row) => sum + definition.numerator(row), 0);
+  const denominator = rows.reduce((sum, row) => sum + definition.denominator(row), 0);
+  return denominator ? (numerator / denominator) * 100 : 0;
+}
+
+function contextComparison(value: number, median: number) {
+  const difference = value - median;
+  if (Math.abs(difference) < 0.05) return "At the district median";
+  return `${Math.abs(difference).toFixed(1)} points ${difference > 0 ? "above" : "below"} the district median`;
+}
+
 function resultId(feature: PrecinctFeature) {
   const town = feature.properties.TOWN;
   const code = CITY_CODES[town];
@@ -144,6 +321,7 @@ function allCoordinates(geometry: Geometry): number[][] {
 
 function useDashboardData() {
   const [rows, setRows] = useState<ResultRow[]>([]);
+  const [demographics, setDemographics] = useState<DemographicRow[]>([]);
   const [geo, setGeo] = useState<FeatureCollection | null>(null);
   const [sources, setSources] = useState<Source[]>([]);
   const [election, setElection] = useState<ElectionMeta | null>(null);
@@ -155,14 +333,16 @@ function useDashboardData() {
       const electionMeta = await fetch("/assets/data/election.json", { cache: "no-store" })
         .then((response) => response.json()) as ElectionMeta;
       const version = encodeURIComponent(electionMeta.data_version);
-      const [csv, geography, sourceList, changeLogEntries] = await Promise.all([
+      const [csv, demographicCsv, geography, sourceList, changeLogEntries] = await Promise.all([
         fetch(`/assets/data/results.csv?v=${version}`, { cache: "no-store" }).then((response) => response.text()),
+        fetch(`/assets/data/precinct_demographics.csv?v=${version}`, { cache: "no-store" }).then((response) => response.text()),
         fetch(`/assets/data/district-precincts.geojson?v=${version}`, { cache: "no-store" }).then((response) => response.json()),
         fetch(`/assets/data/sources.json?v=${version}`, { cache: "no-store" }).then((response) => response.json()),
         fetch(`/assets/data/changelog.json?v=${version}`, { cache: "no-store" }).then((response) => response.json()),
       ]);
 
         setRows(parseCsv(csv));
+        setDemographics(parseDemographicCsv(demographicCsv));
         setGeo(geography as FeatureCollection);
         setSources(sourceList as Source[]);
         setElection(electionMeta as ElectionMeta);
@@ -172,7 +352,7 @@ function useDashboardData() {
     loadData().catch(() => setError("The dashboard data could not be loaded."));
   }, []);
 
-  return { rows, geo, sources, election, changelog, error };
+  return { rows, demographics, geo, sources, election, changelog, error };
 }
 
 function DownloadIcon() {
@@ -202,16 +382,24 @@ function InfoIcon() {
 
 function ElectionMap({
   rows,
+  demographics,
   geo,
   city,
   metric,
+  contextMetric,
+  breaks,
+  contextMedian,
   selectedId,
   onSelect,
 }: {
   rows: ResultRow[];
+  demographics: DemographicRow[];
   geo: FeatureCollection;
   city: string;
   metric: Metric;
+  contextMetric: ContextMetricDefinition;
+  breaks: number[];
+  contextMedian: number;
   selectedId: string;
   onSelect: (id: string) => void;
 }) {
@@ -224,6 +412,10 @@ function ElectionMap({
   } | null>(null);
   const [zoom, setZoom] = useState(1);
   const lookup = useMemo(() => new Map(rows.map((row) => [row.id, row])), [rows]);
+  const demographicLookup = useMemo(
+    () => new Map(demographics.map((row) => [row.precinct_id, row])),
+    [demographics],
+  );
   const bounds = useMemo(() => {
     const coords = geo.features.flatMap((feature) => allCoordinates(feature.geometry));
     const meanLat = coords.reduce((sum, point) => sum + point[1], 0) / coords.length;
@@ -269,6 +461,10 @@ function ElectionMap({
 
   const featureFill = (row: ResultRow | undefined) => {
     if (!row) return "#E7E5DF";
+    if (metric === "context") {
+      const demographic = demographicLookup.get(row.id);
+      return demographic ? contextFill(contextMetric.value(demographic), breaks) : "#E7E5DF";
+    }
     if (metric === "turnout") {
       const turnout = row.ballots_cast_total / row.registered_voters;
       if (turnout < 0.2) return "#E8EEF2";
@@ -300,6 +496,15 @@ function ElectionMap({
     return 3.5 + scaled * 7.5;
   };
 
+  const leaderMark = (row: ResultRow) => {
+    const candidateVotes = row.brownsberger_votes + row.lander_votes;
+    const lead = candidateVotes ? (row.brownsberger_votes - row.lander_votes) / candidateVotes : 0;
+    if (Math.abs(lead) < 0.01) return { label: "≈", className: "close" };
+    return row.brownsberger_votes > row.lander_votes
+      ? { label: "B", className: "brownsberger" }
+      : { label: "L", className: "lander" };
+  };
+
   const moveTooltip = (event: React.MouseEvent, id: string) => {
     const rect = wrapRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -312,13 +517,15 @@ function ElectionMap({
   };
 
   const hoveredRow = hovered ? lookup.get(hovered.id) : undefined;
+  const hoveredDemographic = hovered ? demographicLookup.get(hovered.id) : undefined;
   const selectedRow = lookup.get(selectedId);
+  const selectedDemographic = demographicLookup.get(selectedId);
 
   return (
     <div className="map-stage" ref={wrapRef}>
-      <svg className="precinct-map" viewBox="0 0 940 610" role="img" aria-labelledby="map-title map-desc">
+      <svg className="precinct-map" viewBox="0 0 940 610" role="group" aria-labelledby="map-title map-desc">
         <title id="map-title">Precinct-level election result map</title>
-        <desc id="map-desc">Official Massachusetts precinct boundaries shaded by candidate lead or primary turnout.</desc>
+        <desc id="map-desc">Official Massachusetts precinct boundaries shaded by candidate lead, primary turnout, or selected Census context.</desc>
         <g style={{ transform: `translate(${470 * (1 - zoom)}px, ${305 * (1 - zoom)}px) scale(${zoom})` }}>
           {geo.features.map((feature) => {
             const id = resultId(feature);
@@ -333,7 +540,7 @@ function ElectionMap({
                 className={`precinct-shape${active ? " active" : ""}${faded ? " faded" : ""}`}
                 tabIndex={0}
                 role="button"
-                aria-label={row ? `${precinctLabel(row)}. Brownsberger ${row.brownsberger_votes} votes, ${percent(brownsbergerShare(row))} of the two-candidate vote. Lander ${row.lander_votes} votes. Turnout ${percent((row.ballots_cast_total / row.registered_voters) * 100)}.` : feature.properties.WP_NAME}
+                aria-label={row ? `${precinctLabel(row)}. Brownsberger ${row.brownsberger_votes} votes, ${percent(brownsbergerShare(row))} of the two-candidate vote. Lander ${row.lander_votes} votes. Turnout ${percent((row.ballots_cast_total / row.registered_voters) * 100)}.${metric === "context" && demographicLookup.get(id) ? ` ${contextMetric.label} ${percent(contextMetric.value(demographicLookup.get(id)!))}.` : ""}` : feature.properties.WP_NAME}
                 onMouseMove={(event) => moveTooltip(event, id)}
                 onMouseLeave={() => setHovered(null)}
                 onFocus={() => setHovered({ id, x: 470, y: 95, maxX: 546 })}
@@ -358,6 +565,22 @@ function ElectionMap({
               })}
             </g>
           ) : null}
+          {metric === "context" ? (
+            <g className="context-result-markers" aria-hidden="true">
+              {geo.features.map((feature) => {
+                const row = lookup.get(resultId(feature));
+                if (!row || (city !== "All" && row.municipality !== city)) return null;
+                const [cx, cy] = featureCenter(feature);
+                const marker = leaderMark(row);
+                return (
+                  <g key={`result-${row.id}`} transform={`translate(${cx} ${cy})`}>
+                    <circle r="9.5" />
+                    <text className={marker.className} textAnchor="middle" dominantBaseline="central">{marker.label}</text>
+                  </g>
+                );
+              })}
+            </g>
+          ) : null}
         </g>
       </svg>
 
@@ -376,6 +599,9 @@ function ElectionMap({
           }}
         >
           <strong>{precinctLabel(hoveredRow)}</strong>
+          {metric === "context" && hoveredDemographic ? (
+            <div className="tooltip-context"><span>{contextMetric.legendLabel}</span><b>{percent(contextMetric.value(hoveredDemographic))}</b></div>
+          ) : null}
           <div><span><i style={{ background: BROWNSBERGER }} />Brownsberger</span><b>{number(hoveredRow.brownsberger_votes)}</b></div>
           <div><span><i style={{ background: LANDER }} />Lander</span><b>{number(hoveredRow.lander_votes)}</b></div>
           <div className="tooltip-rule" />
@@ -404,6 +630,13 @@ function ElectionMap({
             <span><b>{percent(brownsbergerShare(selectedRow))}</b>Brownsberger share</span>
             <span><b>{percent((selectedRow.ballots_cast_total / selectedRow.registered_voters) * 100)}</b>Turnout</span>
           </div>
+          {metric === "context" && selectedDemographic ? (
+            <div className="selection-context">
+              <span>{contextMetric.label}</span>
+              <strong>{percent(contextMetric.value(selectedDemographic))}</strong>
+              <small>{contextComparison(contextMetric.value(selectedDemographic), contextMedian)}</small>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </div>
@@ -411,9 +644,10 @@ function ElectionMap({
 }
 
 function App() {
-  const { rows, geo, sources, election, changelog, error } = useDashboardData();
+  const { rows, demographics, geo, sources, election, changelog, error } = useDashboardData();
   const [city, setCity] = useState("All");
   const [metric, setMetric] = useState<Metric>("lead");
+  const [contextMetricKey, setContextMetricKey] = useState<ContextMetricKey>("collegeDegree");
   const [selectedId, setSelectedId] = useState("");
   const [query, setQuery] = useState("");
   const [showAllRows, setShowAllRows] = useState(false);
@@ -451,6 +685,29 @@ function App() {
         );
       }),
     [rows],
+  );
+
+  const contextDefinition = activeContextMetric(contextMetricKey);
+  const demographicBreaks = useMemo(
+    () => contextBreaks(demographics, contextDefinition),
+    [demographics, contextDefinition],
+  );
+  const contextMedian = useMemo(() => {
+    const values = demographics
+      .map(contextDefinition.value)
+      .filter((value) => Number.isFinite(value))
+      .sort((a, b) => a - b);
+    return quantile(values, 0.5);
+  }, [demographics, contextDefinition]);
+  const cityContext = useMemo(
+    () => CITY_ORDER.slice(1).map((name) => ({
+      name,
+      value: aggregateContext(
+        demographics.filter((row) => row.municipality === name),
+        contextDefinition,
+      ),
+    })),
+    [demographics, contextDefinition],
   );
 
   const filteredRows = useMemo(() => {
@@ -509,7 +766,7 @@ function App() {
     return <main className="loading-state"><p>{error}</p></main>;
   }
 
-  if (!rows.length || !geo || !election) {
+  if (!rows.length || !demographics.length || !geo || !election) {
     return <main className="loading-state"><span className="loader" /><p>Loading precinct returns…</p></main>;
   }
 
@@ -517,6 +774,13 @@ function App() {
   const finalBrownsbergerShare = (election.brownsberger_votes / finalCandidateVotes) * 100;
   const finalLanderShare = (election.lander_votes / finalCandidateVotes) * 100;
   const dataVersion = encodeURIComponent(election.data_version);
+  const contextLegendLabels = [
+    `≤ ${percent(demographicBreaks[0])}`,
+    `${percent(demographicBreaks[0])}–${percent(demographicBreaks[1])}`,
+    `${percent(demographicBreaks[1])}–${percent(demographicBreaks[2])}`,
+    `${percent(demographicBreaks[2])}–${percent(demographicBreaks[3])}`,
+    `> ${percent(demographicBreaks[3])}`,
+  ];
 
   return (
     <main>
@@ -594,7 +858,7 @@ function App() {
           <div>
             <p className="section-number">01 / EXPLORE</p>
             <h2>Precinct map</h2>
-            <p>Color shows the candidate lead; circle size shows turnout at the same time. On a phone, tap a precinct once to open its full details.</p>
+            <p>Switch between election results, turnout, and community context. On a phone, tap a precinct once to see the result and selected context together.</p>
           </div>
           <div className="metric-control" aria-label="Map display metric">
             <button
@@ -610,6 +874,13 @@ function App() {
               onClick={() => setMetric("turnout")}
             >
               Turnout only
+            </button>
+            <button
+              className={metric === "context" ? "active" : ""}
+              aria-pressed={metric === "context"}
+              onClick={() => setMetric("context")}
+            >
+              Community context
             </button>
           </div>
         </div>
@@ -630,9 +901,36 @@ function App() {
           ))}
         </div>
 
+        {metric === "context" ? (
+          <div className="context-picker">
+            <label htmlFor="context-metric">Shade precincts by</label>
+            <select
+              id="context-metric"
+              value={contextMetricKey}
+              onChange={(event) => setContextMetricKey(event.target.value as ContextMetricKey)}
+            >
+              {CONTEXT_METRICS.map((option) => (
+                <option key={option.id} value={option.id}>{option.label}</option>
+              ))}
+            </select>
+            <p>{contextDefinition.description} Darker shading means a higher value; the letter shows who led the precinct.</p>
+          </div>
+        ) : null}
+
         <div className="map-grid">
           <div>
-            <ElectionMap rows={rows} geo={geo} city={city} metric={metric} selectedId={selectedId} onSelect={setSelectedId} />
+            <ElectionMap
+              rows={rows}
+              demographics={demographics}
+              geo={geo}
+              city={city}
+              metric={metric}
+              contextMetric={contextDefinition}
+              breaks={demographicBreaks}
+              contextMedian={contextMedian}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+            />
             <div className="legend" aria-label="Map legend">
               {metric === "lead" ? (
                 <>
@@ -646,7 +944,7 @@ function App() {
                   <span className="turnout-size-legend"><i /><i /><i />Larger circle = higher turnout</span>
                   <small>Lead = percentage-point difference in the two-candidate vote.</small>
                 </>
-              ) : (
+              ) : metric === "turnout" ? (
                 <>
                   <span className="turnout-bin"><i style={{ background: "#E8EEF2" }} />Under 20%</span>
                   <span className="turnout-bin"><i style={{ background: "#B7CBD6" }} />20–29.9%</span>
@@ -654,36 +952,78 @@ function App() {
                   <span className="turnout-bin"><i style={{ background: "#173F53" }} />40%+</span>
                   <small>Total primary ballots ÷ registered voters.</small>
                 </>
+              ) : (
+                <>
+                  <div className="legend-thresholds context-thresholds" aria-label={`${contextDefinition.legendLabel} district quintiles`}>
+                    {CONTEXT_COLORS.map((color, index) => (
+                      <span className="context-key" key={`${contextMetricKey}-${index}`}>
+                        <i style={{ background: color }} />{contextLegendLabels[index]}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="context-marker-key"><b>B</b><b>L</b><b>≈</b>Precinct leader</span>
+                  <small>{contextDefinition.legendLabel}; district quintiles from modeled ACS precinct estimates.</small>
+                </>
               )}
             </div>
           </div>
 
-          <aside className="city-summary">
-            <p className="eyebrow">Municipal totals</p>
-            <h3>How the district adds up</h3>
-            <div className="city-list">
-              {cityTotals.map((item) => {
-                const total = item.brownsberger + item.lander;
-                const bShare = total ? (item.brownsberger / total) * 100 : 0;
-                return (
-                  <button key={item.name} onClick={() => setCity(item.name)} className={city === item.name ? "selected" : ""}>
-                    <div className="city-title"><strong>{item.name}</strong><span>{item.precincts} precincts</span></div>
-                    <div className="mini-bar"><span style={{ width: `${bShare}%`, background: BROWNSBERGER }} /><span style={{ width: `${100 - bShare}%`, background: LANDER }} /></div>
-                    <div className="city-numbers">
-                      <span><i style={{ background: BROWNSBERGER }} />{number(item.brownsberger)} B votes</span>
-                      <span><i style={{ background: LANDER }} />{number(item.lander)} L votes</span>
-                      <span className="city-share">{percent(bShare)} Brownsberger</span>
-                      <span>{percent((item.ballots / item.registered) * 100)} turnout</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-            <div className="status-key">
-              <InfoIcon />
-              <p><strong>Certified recount snapshot.</strong> All 59 contest rows come from the Secretary of the Commonwealth&apos;s post-recount precinct export. Registration and total-turnout fields come from the municipalities&apos; election-wide precinct reports.</p>
-            </div>
-          </aside>
+          {metric === "context" ? (
+            <aside className="city-summary context-summary">
+              <p className="eyebrow">Compare without leaving the map</p>
+              <h3>{contextDefinition.legendLabel} by city</h3>
+              <p className="context-summary-intro">District median precinct: <strong>{percent(contextMedian)}</strong>. Each city card keeps the election result beside the demographic estimate.</p>
+              <div className="context-city-list">
+                {cityContext.map((item) => {
+                  const electionTotal = cityTotals.find((total) => total.name === item.name)!;
+                  const twoCandidateVotes = electionTotal.brownsberger + electionTotal.lander;
+                  const bShare = twoCandidateVotes ? (electionTotal.brownsberger / twoCandidateVotes) * 100 : 0;
+                  return (
+                    <button key={item.name} onClick={() => setCity(item.name)} className={city === item.name ? "selected" : ""}>
+                      <div className="city-title"><strong>{item.name}</strong><span>{electionTotal.precincts} precincts</span></div>
+                      <div className="context-city-value"><strong>{percent(item.value)}</strong><span>{contextDefinition.legendLabel}</span></div>
+                      <div className="context-meter" aria-hidden="true"><span style={{ width: `${Math.min(100, item.value)}%` }} /></div>
+                      <div className="context-election-line">
+                        <span><i style={{ background: BROWNSBERGER }} />Brownsberger {percent(bShare)}</span>
+                        <span>{percent((electionTotal.ballots / electionTotal.registered) * 100)} turnout</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="status-key">
+                <InfoIcon />
+                <p><strong>Estimated context, certified result.</strong> Demographic values are 2020–2024 ACS estimates allocated from block groups. Election letters and percentages use certified post-recount results.</p>
+              </div>
+            </aside>
+          ) : (
+            <aside className="city-summary">
+              <p className="eyebrow">Municipal totals</p>
+              <h3>How the district adds up</h3>
+              <div className="city-list">
+                {cityTotals.map((item) => {
+                  const total = item.brownsberger + item.lander;
+                  const bShare = total ? (item.brownsberger / total) * 100 : 0;
+                  return (
+                    <button key={item.name} onClick={() => setCity(item.name)} className={city === item.name ? "selected" : ""}>
+                      <div className="city-title"><strong>{item.name}</strong><span>{item.precincts} precincts</span></div>
+                      <div className="mini-bar"><span style={{ width: `${bShare}%`, background: BROWNSBERGER }} /><span style={{ width: `${100 - bShare}%`, background: LANDER }} /></div>
+                      <div className="city-numbers">
+                        <span><i style={{ background: BROWNSBERGER }} />{number(item.brownsberger)} B votes</span>
+                        <span><i style={{ background: LANDER }} />{number(item.lander)} L votes</span>
+                        <span className="city-share">{percent(bShare)} Brownsberger</span>
+                        <span>{percent((item.ballots / item.registered) * 100)} turnout</span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="status-key">
+                <InfoIcon />
+                <p><strong>Certified recount snapshot.</strong> All 59 contest rows come from the Secretary of the Commonwealth&apos;s post-recount precinct export. Registration and total-turnout fields come from the municipalities&apos; election-wide precinct reports.</p>
+              </div>
+            </aside>
+          )}
         </div>
       </section>
 
@@ -696,6 +1036,7 @@ function App() {
           </div>
           <div className="download-group">
             <a className="download-primary" href={`/assets/data/results.csv?v=${dataVersion}`} download><DownloadIcon />Results CSV</a>
+            <a className="download-secondary" href={`/assets/data/precinct_demographics.csv?v=${dataVersion}`} download><DownloadIcon />Context CSV</a>
             <a className="download-secondary" href={`/assets/data/district-precincts.geojson?v=${dataVersion}`} download><DownloadIcon />Boundaries</a>
           </div>
         </div>
@@ -751,36 +1092,35 @@ function App() {
         <div className="section-heading">
           <div>
             <p className="section-number">03 / ADD CONTEXT</p>
-            <h2>Demographics and primary participation</h2>
-            <p>Official sources can add context, but Census geographies and election precincts must be matched carefully.</p>
+            <h2>How the context layer works</h2>
+            <p>The comparison is built into the map. These notes explain which values are direct counts, which are estimates, and what they cannot tell us.</p>
           </div>
         </div>
 
         <div className="context-grid">
           <article>
-            <span className="context-label">Census profiles</span>
-            <h3>Social and economic context</h3>
-            <p>The 2020–2024 ACS 5-year data covers income, education, housing, age, race, and other characteristics at tract and block-group levels.</p>
-            <a href="https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/" target="_blank" rel="noreferrer">Open ACS data profiles <ExternalIcon /></a>
+            <span className="context-label">Direct block counts</span>
+            <h3>1,819 Census blocks matched to 59 precincts</h3>
+            <p>Each 2020 Census block is assigned to the 2022 precinct with the largest geographic overlap. The resulting population total matches MassGIS in every precinct.</p>
+            <a href={`/assets/data/census_block_to_precinct.csv?v=${dataVersion}`} download>Download block crosswalk <DownloadIcon /></a>
           </article>
           <article>
-            <span className="context-label">Voting-age population</span>
-            <h3>Citizen voting-age population</h3>
-            <p>The Census Bureau&apos;s 2020–2024 CVAP file provides race and ethnicity estimates for tracts, block groups, and legislative districts.</p>
-            <a href="https://www.census.gov/programs-surveys/decennial-census/about/voting-rights/cvap/2020-2024-CVAP.html" target="_blank" rel="noreferrer">Open the CVAP dataset <ExternalIcon /></a>
+            <span className="context-label">Modeled ACS context</span>
+            <h3>Block populations become allocation weights</h3>
+            <p>Age, race and ethnicity, education, tenure, and household-income values begin as 2020–2024 ACS block-group estimates. Population or housing-unit weights allocate them to precincts.</p>
+            <a href={`/assets/data/census_data_dictionary.json?v=${dataVersion}`} target="_blank" rel="noreferrer">Open data dictionary <ExternalIcon /></a>
           </article>
           <article>
-            <span className="context-label">Primary voter enrollment</span>
-            <h3>{number(totals.demBallots)} Democratic ballots in the mapped file</h3>
-            <p>Published returns do not split these voters into registered Democrats versus unenrolled voters. State registration statistics show the eligible party mix; marked primary lists are needed to measure who participated. Publish only precinct aggregates, not voter names.</p>
+            <span className="context-label">Interpret carefully</span>
+            <h3>Neighborhood context is not voter behavior</h3>
+            <p>A precinct correlation cannot show how an individual or demographic group voted. Published returns also do not split the {number(totals.demBallots)} Democratic ballots between registered Democrats and unenrolled voters.</p>
             <div className="context-links">
-              <a href="https://www.sec.state.ma.us/divisions/elections/research-and-statistics/statistics-hub.htm" target="_blank" rel="noreferrer">Enrollment data <ExternalIcon /></a>
-              <a href="https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section37" target="_blank" rel="noreferrer">Marked-list law <ExternalIcon /></a>
-              <a href="https://www.sec.state.ma.us/divisions/elections/voting-information/vote-primary.htm" target="_blank" rel="noreferrer">Primary rules <ExternalIcon /></a>
+              <a href={`/assets/data/precinct_demographics.csv?v=${dataVersion}`} download>Context CSV <DownloadIcon /></a>
+              <a href={`/assets/data/census_crosswalk_qa.json?v=${dataVersion}`} target="_blank" rel="noreferrer">QA report <ExternalIcon /></a>
             </div>
           </article>
         </div>
-        <p className="context-caution"><InfoIcon /><span><strong>Why no precinct demographic numbers yet?</strong> The dashboard uses 2022 Massachusetts precinct boundaries, while ACS estimates are published for Census tracts and block groups. A defensible precinct estimate needs a documented population-weighted crosswalk and should retain Census margins of error.</span></p>
+        <p className="context-caution"><InfoIcon /><span><strong>Read the map as an estimate, not a head count.</strong> The context layer uses ACS sampling estimates and a documented geographic allocation. Click any precinct to compare its value with the district median; download the CSV for margins of error and underlying counts.</span></p>
       </section>
 
       <section className="source-section" id="sources">
@@ -794,13 +1134,13 @@ function App() {
 
         <div className="method-grid">
           <article>
-            <span>1</span><div><strong>Keep raw units</strong><p>Candidate votes and ballots are stored as counts. Percentages are calculated in the browser.</p></div>
+            <span>1</span><div><strong>Keep election counts intact</strong><p>Candidate votes and ballots remain official counts. Election percentages are calculated in the browser.</p></div>
           </article>
           <article>
-            <span>2</span><div><strong>Use total primary turnout</strong><p>Turnout is total Democratic and Republican ballots divided by registered voters.</p></div>
+            <span>2</span><div><strong>Build context from blocks</strong><p>2020 Census blocks connect 2020–2024 ACS block-group estimates to the 2022 precinct map.</p></div>
           </article>
           <article>
-            <span>3</span><div><strong>Reconcile every precinct</strong><p>The Secretary&apos;s post-recount precinct export sums exactly to the final district result and drives the headline, map, table, and municipal totals.</p></div>
+            <span>3</span><div><strong>Show uncertainty honestly</strong><p>The map labels demographic values as estimates; downloadable files retain margins of error, weights, and QA checks.</p></div>
           </article>
         </div>
 
@@ -820,12 +1160,12 @@ function App() {
         <div>
           <p className="section-number">BUILT FOR HANDOFF</p>
           <h2>Update it without touching the code.</h2>
-          <p>The dashboard reads five plain data files. Election staff can update results in Excel and edit the small summary, source, and change-log files in any text editor.</p>
+          <p>Routine election updates still use plain data files. Census context is rebuilt with one documented helper, so maintainers do not hand-edit geographic weights.</p>
         </div>
         <ol>
           <li><span>01</span><div><strong>Update results.csv</strong><p>One row per precinct; keep the column names unchanged.</p></div></li>
-          <li><span>02</span><div><strong>Update the small JSON files</strong><p>Change final totals, source links, dates, and public change notes without editing the application code.</p></div></li>
-          <li><span>03</span><div><strong>Republish</strong><p>Run the documented build command. Boundaries only change after redistricting.</p></div></li>
+          <li><span>02</span><div><strong>Refresh Census context when needed</strong><p>Run the one-command helper, then confirm every check in the generated QA report is true.</p></div></li>
+          <li><span>03</span><div><strong>Update notes and republish</strong><p>Edit source links and the public change log, then run the documented site build.</p></div></li>
         </ol>
       </section>
 

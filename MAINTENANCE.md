@@ -10,6 +10,11 @@ This site is deliberately file-based. Routine election corrections do not requir
 - `public/data/changelog.json` — dated, plain-language notes shown at the bottom of the site.
 - `public/data/district-precincts.geojson` — official boundary geometry. Replace only when MassGIS publishes a newer applicable district geography.
 
+The Census crosswalk files in `public/data/` are generated files. Do not edit
+them by hand. Run `scripts/update-census-data.ps1` and review
+`public/data/census_crosswalk_qa.json`; the full method is documented in
+`docs/CENSUS_PRECINCT_METHOD.md`.
+
 ## Results CSV data dictionary
 
 | Field | Meaning |
@@ -58,8 +63,9 @@ The Secretary of the Commonwealth's downloadable precinct file is the controllin
 
 ## Demographic and primary-voter context
 
-- Census ACS and CVAP values are estimates for Census tracts or block groups, not direct measurements for the dashboard's 2022 election precinct polygons.
-- Before adding precinct demographics, create a documented population-weighted crosswalk and retain the source estimate's margin of error.
+- The prepared Census dataset uses 2020 blocks to map 2020-2024 ACS block-group estimates to the dashboard's 2022 precincts. These remain modeled precinct estimates, not direct measurements.
+- Keep the `*_moe` columns and the Census data dictionary with any published extract. Never present modeled ACS percentages as exact precinct counts.
+- To refresh the dataset on Windows, run `powershell -ExecutionPolicy Bypass -File scripts/update-census-data.ps1 --refresh` from the project root, then confirm every check in `census_crosswalk_qa.json` is `true`.
 - Published election returns report Democratic ballots cast but do not split those ballots between registered Democrats and unenrolled voters.
 - The Secretary of the Commonwealth's registration workbook supplies party enrollment counts by precinct, but those counts describe eligibility, not participation.
 - Massachusetts General Laws Chapter 53, Section 37 provides access to marked primary voting lists. If local election offices provide them, aggregate the enrollment split by precinct and do not publish voter names or addresses.
@@ -69,4 +75,5 @@ The Secretary of the Commonwealth's downloadable precinct file is the controllin
 - Do not rename IDs or add spaces to them; the map join depends on exact matches.
 - Do not paste percentages into numeric fields. Store counts only; the site calculates rates.
 - Do not silently replace the geometry with election results. Boundaries and results are separate downloadable files.
+- Do not hand-edit the Census crosswalk or mix Census/ACS vintages without rebuilding and documenting the method.
 - If a recount changes only the district total and no revised precinct canvass is published, keep the mapped precinct snapshot clearly labeled instead of inventing a precinct allocation.

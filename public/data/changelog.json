@@ -1,6 +1,16 @@
 [
   {
     "date": "September 11, 2026",
+    "title": "Community context added to the precinct map",
+    "items": [
+      "Added eight selectable Census and ACS context views directly on the election map.",
+      "Kept the precinct result visible with B, L, or close-race markers while demographic shading is active.",
+      "Added precinct-versus-district-median comparisons, city summaries, source-linked downloads, and uncertainty notes.",
+      "Made the block assignment, block-group crosswalk, precinct estimates, data dictionary, and QA report available as downloadable data."
+    ]
+  },
+  {
+    "date": "September 11, 2026",
     "title": "Certified post-recount precinct results",
     "items": [
       "Replaced all 59 pre-recount contest rows with the Secretary of the Commonwealth's post-recount precinct export.",

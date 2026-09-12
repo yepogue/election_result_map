@@ -1,0 +1,32 @@
+{
+  "datasetVersion": "1.0",
+  "generatedAtUtc": "2026-09-12T01:10:22+00:00",
+  "expectedDistrictPrecincts": 59,
+  "outputDistrictPrecincts": 59,
+  "candidateBlocksInBoundingBox": 4585,
+  "candidateBlocksUnassignedOutsideContext": 238,
+  "candidateBlocksAssignedOutsideDistrict": 2528,
+  "assignedDistrictBlocks": 1819,
+  "districtBlocksUsingLargestOverlap": 791,
+  "districtBlocksFlaggedForBoundaryReview": 21,
+  "populatedDistrictBlocksFlaggedForBoundaryReview": 3,
+  "populationInFlaggedBoundaryBlocks": 764,
+  "minimumOverlapPctAmongDistrictBlocks": 0.122,
+  "minimumOverlapPctAmongPopulatedDistrictBlocks": 76.326,
+  "districtPopulation2020FromBlocks": 183947,
+  "districtPopulation2020MassGISCheck": 183947,
+  "populationDifferenceVsMassGIS": 0,
+  "precinctsWithExactMassGISPopulationMatch": 59,
+  "distinctContributingBlockGroups": 158,
+  "acsRelease": {
+    "id": "acs2024_5yr",
+    "name": "ACS 2024 5-year",
+    "years": "2020-2024"
+  },
+  "checks": {
+    "allPrecinctsPresent": true,
+    "allCrosswalkWeightsAtMostOneWithinTolerance": true,
+    "allAcsBlockGroupsFound": true,
+    "directPopulationMatchesMassGIS": true
+  }
+}

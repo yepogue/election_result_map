@@ -38,3 +38,8 @@ next-env.d.ts
 /dist/
 /.wrangler/
 /public/assets/data/
+
+# local Census crosswalk build environment and download cache
+/.analysis-deps/
+/.venv-census/
+/data/cache/
