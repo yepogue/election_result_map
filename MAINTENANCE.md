@@ -15,6 +15,12 @@ them by hand. Run `scripts/update-census-data.ps1` and review
 `public/data/census_crosswalk_qa.json`; the full method is documented in
 `docs/CENSUS_PRECINCT_METHOD.md`.
 
+The files whose names begin with `wu_` are also generated. They power the
+`/wu-precinct-analysis` page and should not be hand-edited. Run
+`scripts/update-wu-analysis.ps1 --refresh`, review
+`public/data/wu_analysis_qa.json`, and read
+`docs/WU_PRECINCT_ANALYSIS_METHOD.md` for the complete method.
+
 ## Results CSV data dictionary
 
 | Field | Meaning |
@@ -47,6 +53,16 @@ them by hand. Run `scripts/update-census-data.ps1` and review
 10. Run `npm run lint` and `npm run build`.
 11. Check the map, downloads, source links, change log, and a narrow mobile viewport before publishing.
 12. Check that table sort buttons work in both directions and that the map legend matches the fill thresholds in the code.
+13. On the Wu analysis page, check both candidate-view buttons, the full-scale toggle, mobile race/election selectors, dot details, table search/sort, and every download link.
+
+## Wu analysis refresh checklist
+
+1. Run `powershell -ExecutionPolicy Bypass -File scripts/update-wu-analysis.ps1 --refresh` from the project root.
+2. Confirm every check in `public/data/wu_analysis_qa.json` is `true`.
+3. Confirm the 2021 numerator and denominator totals are conserved after the boundary allocation.
+4. Confirm the Brownsberger–Lander input is still the official post-recount export.
+5. Review the linked official sources and update the page's change log if a source or result changes.
+6. Run `npm run lint` and `npm run build`, then check the page at both desktop and narrow mobile widths.
 
 ## Current published-snapshot checks
 

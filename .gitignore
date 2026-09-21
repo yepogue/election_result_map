@@ -42,4 +42,6 @@ next-env.d.ts
 # local Census crosswalk build environment and download cache
 /.analysis-deps/
 /.venv-census/
+/.venv-wu-analysis/
 /data/cache/
+/tmp/

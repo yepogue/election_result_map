@@ -16,6 +16,13 @@ const files = [
   "census_block_group_precinct_crosswalk.csv",
   "census_crosswalk_qa.json",
   "census_data_dictionary.json",
+  "wu_precinct_analysis.csv",
+  "wu_precinct_analysis.json",
+  "wu_precinct_summary.csv",
+  "wu_precinct_summary.json",
+  "wu_2021_to_2022_precinct_crosswalk.csv",
+  "wu_analysis_qa.json",
+  "wu_analysis_sources.json",
 ];
 
 mkdirSync(targetDir, { recursive: true });

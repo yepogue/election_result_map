@@ -1,0 +1,64 @@
+{
+  "generatedOn": "2026-09-21",
+  "checks": {
+    "crosswalkCoversAllOldAndCurrentBostonPrecincts": true,
+    "crosswalkWeightsSumToOne": true,
+    "2021PreliminaryVotesConserved": true,
+    "2021FinalVotesConserved": true,
+    "allAnalysisPrecinctsHaveThreeWuMeasures": true,
+    "allAnalysisSharesBetweenZeroAndOne": true
+  },
+  "crosswalk": {
+    "oldPrecinctCount": 255,
+    "currentPrecinctCount": 275,
+    "suffolkCountyBlockCount": 7280,
+    "blocksAssignedToBothBostonGeographies": 6019,
+    "crosswalkRowCount": 402,
+    "splitOldPrecinctCount": 80,
+    "combinedCurrentPrecinctCount": 85,
+    "missingOldPrecincts": [],
+    "missingCurrentPrecincts": [],
+    "maximumWeightSumError": 1.1102230246251565e-16,
+    "allOldWeightsSumToOne": true,
+    "allocationBasisCounts": {
+      "2020 population": 254,
+      "land area fallback": 1
+    }
+  },
+  "2021PreliminaryAllocation": {
+    "sourceWuVotes": 36060,
+    "allocatedWuVotes": 36060.0,
+    "sourceValidVotes": 107972,
+    "allocatedValidVotes": 107972.0,
+    "wuVoteConservationError": 0.0,
+    "validVoteConservationError": 0.0
+  },
+  "2021FinalAllocation": {
+    "sourceWuVotes": 91794,
+    "allocatedWuVotes": 91794.0,
+    "sourceValidVotes": 143514,
+    "allocatedValidVotes": 143514.0,
+    "wuVoteConservationError": 0.0,
+    "validVoteConservationError": 0.0
+  },
+  "analysis": {
+    "rowCount": 156,
+    "racePrecinctCounts": {
+      "first-suffolk": 82,
+      "norfolk-suffolk": 39,
+      "suffolk-middlesex": 35
+    },
+    "raceTwoCandidateVotes": {
+      "first-suffolk": 20381,
+      "norfolk-suffolk": 16146,
+      "suffolk-middlesex": 8500
+    },
+    "summaryRowCount": 18
+  },
+  "notes": [
+    "The First Suffolk two-candidate share excludes Juwan Skeens and all other votes.",
+    "2021 results are allocated as vote numerators and denominators before shares are calculated.",
+    "Regression lines are weighted by the two-candidate 2026 vote total in each precinct.",
+    "The public summary uses the modeled difference between the 25th- and 75th-percentile Wu precincts; no bootstrap intervals or significance claims are used."
+  ]
+}

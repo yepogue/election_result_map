@@ -1,0 +1,74 @@
+[
+  {
+    "id": "wu_2021_preliminary",
+    "title": "City of Boston 2021 preliminary mayor results by ward and precinct",
+    "url": "https://search.boston.gov/sites/default/files/file/2021/10/001%20-%202021%20-%2009-14-21%20-%20Mayor.pdf",
+    "downloadUrl": "https://search.boston.gov/sites/default/files/file/2021/10/001%20-%202021%20-%2009-14-21%20-%20Mayor.pdf",
+    "status": "Official City of Boston results",
+    "usedFor": "Michelle Wu votes and valid mayoral votes on the 2021 precinct geography"
+  },
+  {
+    "id": "wu_2021_final",
+    "title": "City of Boston 2021 final mayor results by ward and precinct",
+    "url": "https://search.boston.gov/sites/default/files/file/2021/11/2021-11-02-21-Mayor.pdf",
+    "downloadUrl": "https://search.boston.gov/sites/default/files/file/2021/11/2021-11-02-21-Mayor.pdf",
+    "status": "Official City of Boston results",
+    "usedFor": "Michelle Wu votes and valid mayoral votes on the 2021 precinct geography"
+  },
+  {
+    "id": "wu_2025_preliminary",
+    "title": "City of Boston 2025 preliminary mayor recount results by ward and precinct",
+    "url": "https://search.boston.gov/sites/default/files/file/2025/10/001-2025-09-09-25-Mayor-RECOUNT.pdf",
+    "downloadUrl": "https://search.boston.gov/sites/default/files/file/2025/10/001-2025-09-09-25-Mayor-RECOUNT.pdf",
+    "status": "Official City of Boston recount results",
+    "usedFor": "Michelle Wu votes and valid mayoral votes on the current precinct geography"
+  },
+  {
+    "id": "race_first_suffolk",
+    "title": "Secretary of the Commonwealth 2026 First Suffolk Democratic primary precinct export",
+    "url": "https://electionstats.state.ma.us/elections/view/173147/",
+    "downloadUrl": "https://electionstats.state.ma.us/elections/download/173147/precincts_include:1/",
+    "status": "Official state precinct results",
+    "usedFor": "Nicholas Collins, Latoya Gayle, and Juwan Skeens precinct votes"
+  },
+  {
+    "id": "race_norfolk_suffolk",
+    "title": "Secretary of the Commonwealth 2026 Norfolk and Suffolk Democratic primary precinct export",
+    "url": "https://electionstats.state.ma.us/elections/view/173151/",
+    "downloadUrl": "https://electionstats.state.ma.us/elections/download/173151/precincts_include:1/",
+    "status": "Official state precinct results",
+    "usedFor": "Persis Yu and Michael Rush precinct votes"
+  },
+  {
+    "id": "race_suffolk_middlesex",
+    "title": "Secretary of the Commonwealth post-recount Suffolk and Middlesex precinct export",
+    "url": "https://electionstats.state.ma.us/elections/view/173087/",
+    "downloadUrl": "https://electionstats.state.ma.us/elections/download/173087/precincts_include:1/",
+    "status": "Official post-recount state precinct results",
+    "usedFor": "Will Brownsberger and Daniel Lander precinct votes"
+  },
+  {
+    "id": "precincts_2012",
+    "title": "City of Boston precinct boundaries used for the 2021 elections",
+    "url": "https://gisportal.boston.gov/arcgis/rest/services/Planning/OpenData/MapServer/7",
+    "downloadUrl": "https://gisportal.boston.gov/arcgis/rest/services/Planning/OpenData/MapServer/7/query?where=1%3D1&outFields=OBJECTID%2CPRECINCT%2CWARD_PRECINCT&returnGeometry=true&outSR=4326&f=geojson",
+    "status": "Official City of Boston GIS layer; 255 precincts",
+    "usedFor": "Source side of the 2021-to-current precinct crosswalk"
+  },
+  {
+    "id": "precincts_2022",
+    "title": "MassGIS 2022 wards and precincts",
+    "url": "https://arcgisserver.digital.mass.gov/arcgisserver/rest/services/AGOL/WardsPrecincts2022/FeatureServer/0",
+    "downloadUrl": "https://arcgisserver.digital.mass.gov/arcgisserver/rest/services/AGOL/WardsPrecincts2022/FeatureServer/0/query?where=TOWN%3D%27BOSTON%27&outFields=OBJECTID%2CWARD%2CPRECINCT%2CWP_DISTRICT%2CWP_NAME%2CTOWN&returnGeometry=true&outSR=4326&f=geojson",
+    "status": "Official MassGIS current precinct layer; 275 Boston precincts",
+    "usedFor": "Common geography for the 2025 and 2026 results"
+  },
+  {
+    "id": "census_blocks",
+    "title": "2020 Census blocks, Suffolk County, TIGERweb",
+    "url": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/10",
+    "downloadUrl": "https://tigerweb.geo.census.gov/arcgis/rest/services/TIGERweb/tigerWMS_Census2020/MapServer/10/query?where=STATE%3D%2725%27%20AND%20COUNTY%3D%27025%27&outFields=GEOID%2CSTATE%2CCOUNTY%2CTRACT%2CBLOCK%2CBLKGRP%2CPOP100%2CHU100%2CAREALAND%2CAREAWATER%2CINTPTLON%2CINTPTLAT&returnGeometry=true&outSR=4326&f=geojson",
+    "status": "Official U.S. Census Bureau geography and counts",
+    "usedFor": "Population bridge between the old and current precinct boundaries"
+  }
+]

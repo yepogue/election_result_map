@@ -14,6 +14,8 @@ An interactive, source-linked precinct map for the September 1, 2026 Democratic 
 - Direct links to the original municipal election files and state boundary sources.
 - Census ACS/CVAP context links and a documented path for obtaining aggregate primary-voter enrollment splits.
 - A plain-language change log at the bottom of the published dashboard.
+- A separate `/wu-precinct-analysis` page comparing three 2026 Boston State Senate results with Michelle Wu's 2021 and 2025 precinct strength.
+- Downloadable Wu-analysis rows, modeled summaries, the 2021-to-current precinct crosswalk, and an automated QA report.
 
 The headline, map, table, and municipal totals all use the Secretary of the Commonwealth's certified post-recount precinct export. Registration and overall election turnout remain sourced from municipal precinct reports.
 
@@ -28,6 +30,16 @@ The headline, map, table, and municipal totals all use the Secretary of the Comm
 7. Run the validation and build commands below.
 
 See `MAINTENANCE.md` for the field definitions, expected totals, and a release checklist.
+
+## Refresh the Wu precinct analysis
+
+The Wu analysis is generated from the linked official election and boundary sources. On Windows, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/update-wu-analysis.ps1 --refresh
+```
+
+The script creates its own Python environment, rebuilds the public downloads, and writes a QA report. Review `public/data/wu_analysis_qa.json` before publishing. The full allocation and comparison method is in `docs/WU_PRECINCT_ANALYSIS_METHOD.md`.
 
 ## Run locally
 

@@ -793,6 +793,7 @@ function App() {
           <a href="#map">Map</a>
           <a href="#data">Data</a>
           <a href="#context">Context</a>
+          <a href="/wu-precinct-analysis">Wu analysis</a>
           <a href="#sources">Sources</a>
         </nav>
         <a className="header-download" href={`/assets/data/results.csv?v=${dataVersion}`} download>
