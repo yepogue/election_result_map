@@ -90,11 +90,19 @@ Example wording: “Candidate support was 6.9 points higher in a typical Wu-stro
 
 The downloadable technical summary also includes the raw slope, weighted R-squared, fitted intercept, percentile values, and sample size. No bootstrap intervals are used.
 
+## Pooled challenger chart
+
+The pooled chart stacks all 156 Boston precincts and treats Gayle, Lander, and Yu as one descriptive challenger group. The visible line is a vote-weighted regression of challenger share on the selected Wu share. Its 25th-to-75th-percentile result uses the pooled distribution of Wu vote share across all three contests.
+
+Because these are different races in different parts of Boston, a second diagnostic gives every race its own average baseline and estimates one common within-race Wu slope. In regression terms, this is a weighted model with race fixed effects. The page reports the simple pooled slope and this race-adjusted slope together. Similar values show that the combined relationship is not merely created by one contest having both a higher average Wu vote and a higher average challenger vote.
+
+The pooled chart remains descriptive. Race adjustment does not control for demographics, campaign activity, candidate quality, incumbency, or individual voter behavior. It also does not convert the three separate candidates into a literal shared ballot choice.
+
 ## Axes
 
-The default chart view zooms to the observed range so precinct differences remain readable. The same vertical scale is used in all nine panels. Within each Wu election column, all three race panels use the same horizontal scale. A clearly labeled toggle provides full 0–100% axes.
+The default race-panel view zooms to the observed range so precinct differences remain readable. The same vertical scale is used across comparable panels, and panels for the same Wu election use the same horizontal scale. A clearly labeled toggle provides full 0–100% axes. The pooled chart also uses a disclosed observed-range scale.
 
-The horizontal 50% reference identifies majority candidate support. The vertical dashed line identifies the median Wu precinct for that race panel. A 50% Wu reference would not have the same meaning in a multi-candidate preliminary and a two-candidate final.
+The dashed horizontal 50% reference identifies majority candidate support. Light solid lines are scale guides. The orange segment runs only from the fitted result at the 25th percentile of Wu share to the fitted result at the 75th percentile, so its visible rise or fall equals the printed point difference.
 
 ## Quality checks
 

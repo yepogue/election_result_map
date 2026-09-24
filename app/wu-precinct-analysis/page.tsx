@@ -82,6 +82,19 @@ type TooltipState = {
   y: number;
 } | null;
 
+type PooledModel = {
+  slope: number;
+  intercept: number;
+  rSquared: number;
+  wuWeak: number;
+  wuStrong: number;
+  challengerAtWeak: number;
+  challengerAtStrong: number;
+  weakToStrongDifference: number;
+  adjustedSlope: number;
+  adjustedRSquared: number;
+};
+
 type SortKey =
   | "district"
   | "precinct"
@@ -154,6 +167,83 @@ function ticks(domain: readonly [number, number]) {
   const [minimum, maximum] = domain;
   const middle = (minimum + maximum) / 2;
   return [minimum, middle, maximum];
+}
+
+function quantile(values: number[], probability: number) {
+  const sorted = [...values].sort((a, b) => a - b);
+  const index = (sorted.length - 1) * probability;
+  const lower = Math.floor(index);
+  const upper = Math.ceil(index);
+  if (lower === upper) return sorted[lower];
+  return sorted[lower] + (sorted[upper] - sorted[lower]) * (index - lower);
+}
+
+function pooledChallengerModel(rows: AnalysisRow[], measure: WuMeasure): PooledModel | null {
+  if (!rows.length) return null;
+  const weightTotal = rows.reduce((sum, row) => sum + row.two_candidate_votes, 0);
+  const xMean = rows.reduce((sum, row) => sum + row.two_candidate_votes * row[measure], 0) / weightTotal;
+  const yMean = rows.reduce((sum, row) => sum + row.two_candidate_votes * row.challenger_share_pct, 0) / weightTotal;
+  const covariance = rows.reduce(
+    (sum, row) => sum + row.two_candidate_votes * (row[measure] - xMean) * (row.challenger_share_pct - yMean),
+    0,
+  );
+  const xVariance = rows.reduce(
+    (sum, row) => sum + row.two_candidate_votes * (row[measure] - xMean) ** 2,
+    0,
+  );
+  const slope = xVariance ? covariance / xVariance : 0;
+  const intercept = yMean - slope * xMean;
+  const fittedError = rows.reduce(
+    (sum, row) => sum + row.two_candidate_votes * (row.challenger_share_pct - (intercept + slope * row[measure])) ** 2,
+    0,
+  );
+  const totalError = rows.reduce(
+    (sum, row) => sum + row.two_candidate_votes * (row.challenger_share_pct - yMean) ** 2,
+    0,
+  );
+  const wuWeak = quantile(rows.map((row) => row[measure]), 0.25);
+  const wuStrong = quantile(rows.map((row) => row[measure]), 0.75);
+
+  const raceMeans = Object.fromEntries(RACE_ORDER.map((raceId) => {
+    const raceRows = rows.filter((row) => row.race_id === raceId);
+    const raceWeight = raceRows.reduce((sum, row) => sum + row.two_candidate_votes, 0);
+    return [raceId, {
+      x: raceRows.reduce((sum, row) => sum + row.two_candidate_votes * row[measure], 0) / raceWeight,
+      y: raceRows.reduce((sum, row) => sum + row.two_candidate_votes * row.challenger_share_pct, 0) / raceWeight,
+    }];
+  })) as Record<string, { x: number; y: number }>;
+  const adjustedCovariance = rows.reduce((sum, row) => {
+    const raceMean = raceMeans[row.race_id];
+    return sum + row.two_candidate_votes * (row[measure] - raceMean.x) * (row.challenger_share_pct - raceMean.y);
+  }, 0);
+  const adjustedXVariance = rows.reduce((sum, row) => {
+    const raceMean = raceMeans[row.race_id];
+    return sum + row.two_candidate_votes * (row[measure] - raceMean.x) ** 2;
+  }, 0);
+  const adjustedSlope = adjustedXVariance ? adjustedCovariance / adjustedXVariance : 0;
+  const adjustedError = rows.reduce((sum, row) => {
+    const raceMean = raceMeans[row.race_id];
+    const xDifference = row[measure] - raceMean.x;
+    const yDifference = row.challenger_share_pct - raceMean.y;
+    return sum + row.two_candidate_votes * (yDifference - adjustedSlope * xDifference) ** 2;
+  }, 0);
+  const adjustedTotalError = rows.reduce((sum, row) => {
+    const raceMean = raceMeans[row.race_id];
+    return sum + row.two_candidate_votes * (row.challenger_share_pct - raceMean.y) ** 2;
+  }, 0);
+
+  return {
+    slope,
+    intercept,
+    rSquared: totalError ? 1 - fittedError / totalError : 0,
+    wuWeak,
+    wuStrong,
+    challengerAtWeak: intercept + slope * wuWeak,
+    challengerAtStrong: intercept + slope * wuStrong,
+    weakToStrongDifference: slope * (wuStrong - wuWeak),
+    adjustedSlope,
+    adjustedRSquared: adjustedTotalError ? 1 - adjustedError / adjustedTotalError : 0,
+  };
 }
 
 function candidateName(row: AnalysisRow, view: ViewMode) {
@@ -332,6 +422,115 @@ function ScatterPlot({
   );
 }
 
+function PooledChallengerChart({
+  rows,
+  measure,
+  model,
+}: {
+  rows: AnalysisRow[];
+  measure: (typeof WU_MEASURES)[number];
+  model: PooledModel;
+}) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [tooltip, setTooltip] = useState<TooltipState>(null);
+  const width = 960;
+  const height = 510;
+  const margin = { top: 24, right: 24, bottom: 64, left: 70 };
+  const innerWidth = width - margin.left - margin.right;
+  const innerHeight = height - margin.top - margin.bottom;
+  const xDomain = paddedDomain(rows.map((row) => row[measure.id]), false, 3);
+  const yDomain = paddedDomain(rows.map((row) => row.challenger_share_pct), false, 4);
+  const xScale = (value: number) => margin.left + ((value - xDomain[0]) / (xDomain[1] - xDomain[0])) * innerWidth;
+  const yScale = (value: number) => margin.top + innerHeight - ((value - yDomain[0]) / (yDomain[1] - yDomain[0])) * innerHeight;
+  const voteExtent = extent(rows.map((row) => row.two_candidate_votes));
+  const radius = (votes: number) => {
+    const spread = Math.max(1, voteExtent[1] - voteExtent[0]);
+    return 3.5 + Math.sqrt((votes - voteExtent[0]) / spread) * 5;
+  };
+  const showTooltip = (event: React.MouseEvent<SVGCircleElement>, row: AnalysisRow) => {
+    const rect = wrapRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setTooltip({
+      row,
+      x: clamp(event.clientX - rect.left + 12, 8, rect.width - 250),
+      y: clamp(event.clientY - rect.top - 10, 8, rect.height - 155),
+    });
+  };
+
+  return (
+    <div className="pooled-chart-wrap" ref={wrapRef}>
+      <svg
+        className="pooled-chart"
+        viewBox={`0 0 ${width} ${height}`}
+        role="img"
+        aria-label={`Gayle, Lander, and Yu pooled across ${rows.length} Boston precincts. Between the 25th and 75th percentiles of Wu's ${measure.short} vote, modeled challenger support rises ${model.weakToStrongDifference.toFixed(1)} points.`}
+        onMouseLeave={() => setTooltip(null)}
+      >
+        <title>{`All three challengers compared with Wu's ${measure.short} precinct vote`}</title>
+        <rect className="chart-frame" x={margin.left} y={margin.top} width={innerWidth} height={innerHeight} />
+        {ticks(yDomain).map((tick) => (
+          <g key={`pooled-y-${tick}`}>
+            <line className="chart-gridline" x1={margin.left} x2={width - margin.right} y1={yScale(tick)} y2={yScale(tick)} />
+            <text className="chart-tick" x={margin.left - 10} y={yScale(tick) + 4} textAnchor="end">{percent(tick, 0)}</text>
+          </g>
+        ))}
+        {ticks(xDomain).map((tick) => (
+          <g key={`pooled-x-${tick}`}>
+            <line className="chart-gridline" x1={xScale(tick)} x2={xScale(tick)} y1={margin.top} y2={height - margin.bottom} />
+            <text className="chart-tick" x={xScale(tick)} y={height - margin.bottom + 22} textAnchor="middle">{percent(tick, 0)}</text>
+          </g>
+        ))}
+        {yDomain[0] <= 50 && yDomain[1] >= 50 ? (
+          <g>
+            <line className="chart-half-line" x1={margin.left} x2={width - margin.right} y1={yScale(50)} y2={yScale(50)} />
+            <text className="chart-reference-label" x={width - margin.right - 6} y={yScale(50) - 7} textAnchor="end">50% challenger support</text>
+          </g>
+        ) : null}
+        {rows.map((row) => (
+          <circle
+            key={`${row.race_id}-${row.precinct_id}`}
+            className="chart-dot pooled-dot"
+            cx={xScale(row[measure.id])}
+            cy={yScale(row.challenger_share_pct)}
+            r={radius(row.two_candidate_votes)}
+            onMouseEnter={(event) => showTooltip(event, row)}
+            onMouseMove={(event) => showTooltip(event, row)}
+            onClick={(event) => showTooltip(event, row)}
+          >
+            <title>{`${row.challenger}, Ward ${row.ward}, Precinct ${row.precinct}: challenger ${percent(row.challenger_share_pct)}; Wu ${percent(row[measure.id])}.`}</title>
+          </circle>
+        ))}
+        <line
+          className="chart-standardized-line"
+          x1={xScale(model.wuWeak)}
+          x2={xScale(model.wuStrong)}
+          y1={yScale(model.challengerAtWeak)}
+          y2={yScale(model.challengerAtStrong)}
+        />
+        <circle className="chart-standardized-endpoint" cx={xScale(model.wuWeak)} cy={yScale(model.challengerAtWeak)} r="5" />
+        <circle className="chart-standardized-endpoint" cx={xScale(model.wuStrong)} cy={yScale(model.challengerAtStrong)} r="5" />
+        <text className="pooled-line-label" x={xScale(model.wuStrong) - 8} y={yScale(model.challengerAtStrong) - 12} textAnchor="end">
+          {signedPoints(model.weakToStrongDifference)}
+        </text>
+        <text className="chart-axis-title" x={margin.left + innerWidth / 2} y={height - 12} textAnchor="middle">
+          Wu vote share — {measure.short}
+        </text>
+        <text className="chart-axis-title" transform={`translate(17 ${margin.top + innerHeight / 2}) rotate(-90)`} textAnchor="middle">
+          Pooled challenger two-candidate share
+        </text>
+      </svg>
+      {tooltip ? (
+        <div className="scatter-tooltip pooled-tooltip" role="status" style={{ left: tooltip.x, top: tooltip.y }}>
+          <strong>{tooltip.row.challenger} · Ward {tooltip.row.ward}, Precinct {tooltip.row.precinct}</strong>
+          <span>{RACE_SHORT[tooltip.row.race_id]}</span>
+          <span>Challenger: {percent(tooltip.row.challenger_share_pct)} · {number(tooltip.row.challenger_votes)} votes</span>
+          <span>Wu: {percent(tooltip.row[measure.id])}</span>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function SummaryChart({ rows, view }: { rows: SummaryRow[]; view: ViewMode }) {
   const maximum = Math.max(10, Math.ceil(Math.max(...rows.map((row) => Math.abs(row.weakToStrongDifferencePp))) / 5) * 5);
   const width = 950;
@@ -447,6 +646,7 @@ export default function WuPrecinctAnalysisPage() {
   const [qa, setQa] = useState<QaReport | null>(null);
   const [view, setView] = useState<ViewMode>("challenger");
   const [fullScale, setFullScale] = useState(false);
+  const [pooledMeasure, setPooledMeasure] = useState<WuMeasure>("wu_2025_preliminary_share_pct");
   const [mobileRace, setMobileRace] = useState(RACE_ORDER[0]);
   const [mobileMeasure, setMobileMeasure] = useState<WuMeasure>(WU_MEASURES[0].id);
   const [query, setQuery] = useState("");
@@ -515,6 +715,11 @@ export default function WuPrecinctAnalysisPage() {
   );
   const firstSuffolk = viewSummaries.filter((summary) => summary.raceId === "first-suffolk");
   const norfolk = viewSummaries.filter((summary) => summary.raceId === "norfolk-suffolk");
+  const pooledMeasureDefinition = WU_MEASURES.find((measure) => measure.id === pooledMeasure) ?? WU_MEASURES[2];
+  const pooledModel = useMemo(
+    () => pooledChallengerModel(rows, pooledMeasure),
+    [rows, pooledMeasure],
+  );
 
   const filteredRows = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -587,6 +792,7 @@ export default function WuPrecinctAnalysisPage() {
         </a>
         <nav aria-label="Page sections">
           <a href="#summary">Summary</a>
+          <a href="#pooled">Pooled view</a>
           <a href="#comparisons">Comparisons</a>
           <a href="#table">Data</a>
           <a href="#method">Method</a>
@@ -690,10 +896,66 @@ export default function WuPrecinctAnalysisPage() {
         </div>
       </section>
 
+      <section className="analysis-pooled-section" id="pooled">
+        <div className="analysis-section-heading pooled-heading">
+          <div>
+            <p className="section-number">02 / POOL THE CHALLENGERS</p>
+            <h2>What if Gayle, Lander, and Yu were one challenger?</h2>
+            <p>
+              This single chart stacks all 156 Boston precincts and treats the three candidates as one pooled challenger group. Each dot still comes from its original race; the orange segment is one vote-weighted fitted relationship across the combined data.
+            </p>
+          </div>
+          <div className="pooled-measure-control" aria-label="Wu election shown in pooled chart">
+            <span>Wu election</span>
+            <div className="analysis-segmented">
+              {WU_MEASURES.map((measure) => (
+                <button
+                  key={measure.id}
+                  className={pooledMeasure === measure.id ? "active" : ""}
+                  onClick={() => setPooledMeasure(measure.id)}
+                  aria-pressed={pooledMeasure === measure.id}
+                >
+                  {measure.short}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        {pooledModel ? (
+          <div className="pooled-analysis-layout">
+            <PooledChallengerChart rows={rows} measure={pooledMeasureDefinition} model={pooledModel} />
+            <aside className="pooled-reading">
+              <p>{pooledMeasureDefinition.short}</p>
+              <h3>{signedPoints(pooledModel.weakToStrongDifference)}</h3>
+              <span>modeled rise in pooled challenger support</span>
+              <dl>
+                <div>
+                  <dt>Typical Wu-weaker precinct</dt>
+                  <dd>Wu {percent(pooledModel.wuWeak)} → challenger {percent(pooledModel.challengerAtWeak)}</dd>
+                </div>
+                <div>
+                  <dt>Typical Wu-stronger precinct</dt>
+                  <dd>Wu {percent(pooledModel.wuStrong)} → challenger {percent(pooledModel.challengerAtStrong)}</dd>
+                </div>
+              </dl>
+              <strong>Race-adjusted check</strong>
+              <p>
+                The simple pooled slope is {signedPoints(pooledModel.slope * 10)} of challenger support per 10-point increase in Wu share. Giving each race its own baseline produces {signedPoints(pooledModel.adjustedSlope * 10)}—almost the same result.
+              </p>
+              <small>The race-adjusted fit explains {percent(pooledModel.adjustedRSquared * 100, 0)} of the within-race variation. It controls for different average candidate support across the three contests, not for demographics or campaign effects.</small>
+            </aside>
+          </div>
+        ) : null}
+        <div className="pooled-conclusion">
+          <strong>What the pooled chart adds</strong>
+          <p>All three challengers ran better in Wu-stronger precincts, including Yu, whom Wu did not endorse. Pooling therefore strengthens the evidence for a broader geographic alignment with progressive or change-oriented voters; it does not isolate an endorsement effect or show how individual Wu voters cast their Senate ballots.</p>
+        </div>
+      </section>
+
       <section className="analysis-comparison-section" id="comparisons">
         <div className="analysis-section-heading comparison-heading">
           <div>
-            <p className="section-number">02 / INSPECT THE DOTS</p>
+            <p className="section-number">03 / INSPECT THE DOTS</p>
             <h2>Three races, three Wu comparisons each</h2>
             <p>
               Each race now appears once. Inside each race panel, the three compact plots compare the same 2026 candidate result with Wu&apos;s 2021 preliminary, 2021 final, and 2025 preliminary results. Hover or tap a dot for that precinct&apos;s values; dot size represents the 2026 two-candidate vote.
@@ -776,7 +1038,7 @@ export default function WuPrecinctAnalysisPage() {
       <section className="analysis-table-section" id="table">
         <div className="analysis-section-heading">
           <div>
-            <p className="section-number">03 / CHECK A PRECINCT</p>
+            <p className="section-number">04 / CHECK A PRECINCT</p>
             <h2>Analysis dataset</h2>
             <p>Search and sort all Boston precincts used in the charts. All three Wu measures and the candidate&apos;s 2026 two-candidate result are shown together.</p>
           </div>
@@ -833,7 +1095,7 @@ export default function WuPrecinctAnalysisPage() {
       <section className="analysis-method-section" id="method">
         <div className="analysis-section-heading">
           <div>
-            <p className="section-number">04 / METHOD &amp; LIMITS</p>
+            <p className="section-number">05 / METHOD &amp; LIMITS</p>
             <h2>What the analysis does—and does not—say</h2>
             <p>Everything needed to reproduce or challenge the analysis is downloadable below.</p>
           </div>
@@ -859,6 +1121,10 @@ export default function WuPrecinctAnalysisPage() {
             <h3>Compare a typical weak and strong precinct</h3>
             <p>We report the fitted difference from the 25th to 75th percentile of Wu share. Every election therefore answers the same practical question: how much does candidate support differ between a typical Wu-weaker precinct and a typical Wu-stronger precinct?</p>
           </article>
+        </div>
+        <div className="pooled-method-note">
+          <strong>How the pooled chart is checked</strong>
+          <p>The visible orange segment comes from one vote-weighted line across all 156 precincts. Because the three contests have different average challenger results and cover different parts of Boston, the page also fits a common Wu slope while giving each race its own baseline. Similar pooled and race-adjusted slopes mean the combined pattern is not merely an artifact of one contest starting at a higher average level.</p>
         </div>
         {workedExample ? (
           <div className="model-detail">
@@ -915,7 +1181,7 @@ export default function WuPrecinctAnalysisPage() {
       <section className="analysis-sources-section" id="sources">
         <div className="analysis-section-heading">
           <div>
-            <p className="section-number">05 / FACT-CHECK</p>
+            <p className="section-number">06 / FACT-CHECK</p>
             <h2>Original sources</h2>
             <p>Official election tables, precinct boundaries, and Census blocks are linked directly. The page never substitutes an unattributed secondary dataset for a source result.</p>
           </div>
@@ -943,14 +1209,14 @@ export default function WuPrecinctAnalysisPage() {
       <section className="analysis-changelog">
         <div>
           <p className="section-number">CHANGE LOG</p>
-          <h2>September 21, 2026</h2>
+          <h2>Latest updates</h2>
         </div>
         <ul>
-          <li>Published the Boston precinct comparison for three 2026 State Senate Democratic primaries.</li>
-          <li>Used the Secretary of the Commonwealth&apos;s post-recount Brownsberger–Lander precinct export.</li>
-          <li>Added challenger and Wu-endorsed views, the 2021 boundary crosswalk, QA downloads, and original-source links.</li>
-          <li>Used descriptive weighted fits and a 25th-to-75th-percentile comparison; no bootstrap intervals or causal claims.</li>
-          <li>Consolidated the precinct graphics by race and added a plain-language weighted-model explanation with a Lander–Brownsberger worked example.</li>
+          <li><b>September 24, 2026:</b> Added a one-chart pooled challenger view and a race-adjusted check of the shared Wu relationship.</li>
+          <li><b>September 21, 2026:</b> Published the Boston precinct comparison for three 2026 State Senate Democratic primaries using the post-recount Brownsberger–Lander export.</li>
+          <li><b>September 21, 2026:</b> Added challenger and Wu-endorsed views, the 2021 boundary crosswalk, QA downloads, and original-source links.</li>
+          <li><b>September 21, 2026:</b> Used descriptive weighted fits and a 25th-to-75th-percentile comparison; no bootstrap intervals or causal claims.</li>
+          <li><b>September 21, 2026:</b> Consolidated the precinct graphics by race and added a plain-language weighted-model explanation with a Lander–Brownsberger worked example.</li>
         </ul>
       </section>
 
