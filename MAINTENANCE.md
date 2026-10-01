@@ -33,7 +33,7 @@ The files whose names begin with `wu_` are also generated. They power the
 | `ballots_cast_total` | All-party ballots cast, used for overall turnout. |
 | `ballots_cast_dem` | Democratic ballots cast. |
 | `brownsberger_votes` | Votes reported for Will Brownsberger. |
-| `lander_votes` | Votes reported for Max Lander. |
+| `lander_votes` | Votes reported for Daniel Lander. |
 | `other_votes` | Write-in or other candidate votes where reported. |
 | `blank_votes` | Blank votes in this contest. |
 | `result_status` | Short provenance/status label surfaced in the table and tooltip. |
@@ -50,10 +50,11 @@ The files whose names begin with `wu_` are also generated. They power the
 7. Confirm every numeric field is a whole number and no value is negative.
 8. Confirm each row satisfies: candidate votes + other votes + blank votes = Democratic ballots cast.
 9. Confirm the displayed aggregate totals against the source documents.
-10. Run `npm run lint` and `npm run build`.
+10. Rebuild community factors with `python scripts/build_precinct_factor_analysis.py` (NumPy and pandas required); refresh Wu inputs if candidate counts changed. Run `python scripts/review_analysis.py` to independently verify totals, cross-page joins, displayed comparisons, intervals, and crosswalk sums. Then run `npm run lint` and `npm run build`.
 11. Check the map, downloads, source links, change log, and a narrow mobile viewport before publishing.
 12. Check that table sort buttons work in both directions and that the map legend matches the fill thresholds in the code.
 13. On the Wu analysis page, check both candidate-view buttons, the full-scale toggle, mobile race/election selectors, dot details, table search/sort, and every download link.
+14. Check the landing page at `/`, all four navigation links, and community-factor controls at desktop and mobile widths. The landing summary is built from `election.json` and the generated factor data, so both must be rebuilt together when results change.
 
 ## Wu analysis refresh checklist
 

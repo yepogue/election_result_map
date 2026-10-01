@@ -85,37 +85,9 @@
   },
   {
     "municipality": "Census",
-    "title": "2020–2024 American Community Survey 5-year data profiles",
-    "url": "https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/",
-    "status": "Official Census estimates",
-    "usedFor": "Social, economic, housing, and demographic context"
-  },
-  {
-    "municipality": "Census",
-    "title": "2020–2024 Citizen Voting-Age Population special tabulation",
-    "url": "https://www.census.gov/programs-surveys/decennial-census/about/voting-rights/cvap/2020-2024-CVAP.html",
-    "status": "Official Census estimates",
-    "usedFor": "Citizen voting-age population by race and ethnicity"
-  },
-  {
-    "municipality": "Enrollment",
-    "title": "Election Data and Statistics Hub — September 2026 State Primaries",
-    "url": "https://www.sec.state.ma.us/divisions/elections/research-and-statistics/statistics-hub.htm",
-    "status": "Secretary of the Commonwealth data",
-    "usedFor": "Registered voter and party enrollment counts by precinct; not a record of who voted"
-  },
-  {
-    "municipality": "Voter file",
-    "title": "Massachusetts General Laws, Chapter 53, Section 37",
-    "url": "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVIII/Chapter53/Section37",
-    "status": "Official state law",
-    "usedFor": "Marked primary voting lists and access after the election"
-  },
-  {
-    "municipality": "Primary rules",
-    "title": "How to Vote in a Primary",
-    "url": "https://www.sec.state.ma.us/divisions/elections/voting-information/vote-primary.htm",
-    "status": "Secretary of the Commonwealth guidance",
-    "usedFor": "How enrolled and unenrolled voters choose primary ballots"
+    "title": "2020–2024 American Community Survey 5-year detailed tables",
+    "url": "https://www.census.gov/data/developers/data-sets/acs-5year/2024.html",
+    "status": "Official Census estimates; retrieved via Census Reporter",
+    "usedFor": "Block-group tables B01001, B03002, B15003, B25003, and B19001, allocated to precincts; retrieval documented in the data dictionary"
   }
 ]

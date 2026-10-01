@@ -1,0 +1,26 @@
+{
+  "generatedOn": "2026-10-01T18:22:01.608405+00:00",
+  "checks": {
+    "allElectionRowsMatched": true,
+    "uniquePrecinctIds": true,
+    "allDisplayedModelsConvergedAndFinite": true,
+    "positiveOutcomeDenominators": true,
+    "shareModelConverged": true,
+    "turnoutModelConverged": true,
+    "allPredictionsInRange": true,
+    "finiteCovariance": true
+  },
+  "totals": {
+    "registeredVoters": 106253,
+    "ballotsCastTotal": 27616,
+    "ballotsCastDem": 25649,
+    "brownsbergerVotes": 12293,
+    "landerVotes": 12258
+  },
+  "modelDimensions": {
+    "shareRows": 59,
+    "shareParameters": 13,
+    "turnoutRows": 59,
+    "turnoutParameters": 12
+  }
+}

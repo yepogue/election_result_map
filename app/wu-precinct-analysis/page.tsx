@@ -1,7 +1,7 @@
 "use client";
 
-/* eslint-disable @next/next/no-html-link-for-pages */
 import { useEffect, useMemo, useRef, useState } from "react";
+import { PageSections, SiteFooter, SiteHeader } from "../components/SiteNavigation";
 
 type ViewMode = "challenger" | "endorsed";
 type WuMeasure =
@@ -126,12 +126,6 @@ const WU_MEASURES: { id: WuMeasure; short: string; label: string }[] = [
     label: "Wu share, 2025 mayoral preliminary",
   },
 ];
-
-const SERIES_COLORS: Record<string, string> = {
-  "2021 preliminary": "#0072B2",
-  "2021 final": "#009E73",
-  "2025 preliminary": "#D55E00",
-};
 
 function number(value: number) {
   return new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format(value);
@@ -433,7 +427,7 @@ function PooledChallengerChart({
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<TooltipState>(null);
-  const width = 960;
+  const width = 640;
   const height = 510;
   const margin = { top: 24, right: 24, bottom: 64, left: 70 };
   const innerWidth = width - margin.left - margin.right;
@@ -516,7 +510,7 @@ function PooledChallengerChart({
           Wu vote share — {measure.short}
         </text>
         <text className="chart-axis-title" transform={`translate(17 ${margin.top + innerHeight / 2}) rotate(-90)`} textAnchor="middle">
-          Pooled challenger two-candidate share
+          Challenger share (%)
         </text>
       </svg>
       {tooltip ? (
@@ -532,89 +526,25 @@ function PooledChallengerChart({
 }
 
 function SummaryChart({ rows, view }: { rows: SummaryRow[]; view: ViewMode }) {
-  const maximum = Math.max(10, Math.ceil(Math.max(...rows.map((row) => Math.abs(row.weakToStrongDifferencePp))) / 5) * 5);
-  const width = 950;
-  const rowHeight = 34;
-  const groupGap = 48;
-  const top = 88;
-  const left = 190;
-  const right = 76;
-  const plotWidth = width - left - right;
-  const grouped = RACE_ORDER.map((raceId) => rows.filter((row) => row.raceId === raceId));
-  const height = top + grouped.length * rowHeight * 3 + (grouped.length - 1) * groupGap + 30;
-  const scale = (value: number) => left + ((value + maximum) / (2 * maximum)) * plotWidth;
-  const marks = grouped.flatMap((group, groupIndex) => {
-    const groupStart = top + groupIndex * (rowHeight * 3 + groupGap);
-    return group.map((row, index) => ({ row, y: groupStart + index * rowHeight }));
-  });
-
-  return (
-    <div className="summary-chart-wrap">
-      <svg
-        className="summary-chart"
-        viewBox={`0 0 ${width} ${height}`}
-        role="img"
-        aria-label={`Modeled difference in ${view === "challenger" ? "challenger" : "Wu-endorsed candidate"} support between typical Wu-strong and Wu-weak Boston precincts.`}
-      >
-        <title>Typical Wu-strong versus Wu-weak precinct comparison</title>
-        <line className="summary-zero" x1={scale(0)} x2={scale(0)} y1={36} y2={height - 28} />
-        {[-maximum, -maximum / 2, 0, maximum / 2, maximum].map((tick) => (
-          <g key={tick}>
-            <line className="summary-grid" x1={scale(tick)} x2={scale(tick)} y1={36} y2={height - 28} />
-            <text className="summary-tick" x={scale(tick)} y={24} textAnchor="middle">
-              {tick > 0 ? "+" : ""}{tick} pts
-            </text>
-          </g>
-        ))}
-        {marks.map(({ row, y }, index) => {
-          const x0 = scale(0);
-          const x1 = scale(row.weakToStrongDifferencePp);
-          const firstInGroup = index % 3 === 0;
-          return (
-            <g key={`${row.raceId}-${row.wuMeasure}`}>
-              {firstInGroup ? (
-                <>
-                  <text className="summary-race" x={0} y={y - 29}>{row.candidate} support</text>
-                  <text className="summary-race-context" x={0} y={y - 13}>{RACE_SHORT[row.raceId]}</text>
-                </>
-              ) : null}
-              <line
-                className="summary-mark-line"
-                style={{ stroke: SERIES_COLORS[row.wuMeasureLabel] }}
-                x1={x0}
-                x2={x1}
-                y1={y}
-                y2={y}
-              />
-              <circle
-                className="summary-mark-dot"
-                style={{ fill: SERIES_COLORS[row.wuMeasureLabel] }}
-                cx={x1}
-                cy={y}
-                r={6}
-              />
-              <text
-                className="summary-value"
-                x={x1 + (row.weakToStrongDifferencePp >= 0 ? 12 : -12)}
-                y={y + 4}
-                textAnchor={row.weakToStrongDifferencePp >= 0 ? "start" : "end"}
-              >
-                {signedPoints(row.weakToStrongDifferencePp).replace(" points", "")}
-              </text>
-              <text className="summary-measure" x={left - 16} y={y + 5} textAnchor="end">
-                {row.wuMeasureLabel}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-      <div className="analysis-legend" aria-label="Wu election legend">
-        {WU_MEASURES.map((measure) => (
-          <span key={measure.short}><i style={{ background: SERIES_COLORS[measure.short] }} />{measure.short}</span>
-        ))}
-      </div>
-    </div>
-  );
+  const maximum = Math.max(10, Math.ceil(Math.max(...rows.map(row => Math.abs(row.weakToStrongDifferencePp))) / 5) * 5);
+  const x = (value: number) => 12 + ((value + maximum) / (2 * maximum)) * 276;
+  return <div className="wu-summary-grid" aria-label={`${view === "challenger" ? "Challenger" : "Wu-endorsed candidate"} support, Wu-stronger minus Wu-weaker precincts`}>
+    {RACE_ORDER.map(raceId => {
+      const group = rows.filter(row => row.raceId === raceId);
+      return <article key={raceId}>
+        <h3>{group[0]?.candidate} support</h3><p>{RACE_SHORT[raceId]}</p>
+        <div className="effect-scale"><span>−{maximum} pts</span><span>0</span><span>+{maximum} pts</span></div>
+        {group.map(row => <div className="wu-summary-row" key={row.wuMeasure}>
+          <div><span>{row.wuMeasureLabel}</span><strong>{signedPoints(row.weakToStrongDifferencePp)}</strong></div>
+          <svg viewBox="0 0 300 30" role="img" aria-label={`${row.candidate}, Wu ${row.wuMeasureLabel}: ${signedPoints(row.weakToStrongDifferencePp)}`}>
+            {[-maximum, 0, maximum].map(tick => <line key={tick} className={tick === 0 ? "effect-zero" : "effect-grid"} x1={x(tick)} x2={x(tick)} y1={0} y2={30} />)}
+            <line x1={x(0)} x2={x(row.weakToStrongDifferencePp)} y1={15} y2={15} stroke="#075b82" strokeWidth={4} />
+            <circle cx={x(row.weakToStrongDifferencePp)} cy={15} r={5} fill="#075b82" />
+          </svg>
+        </div>)}
+      </article>;
+    })}
+  </div>;
 }
 
 function sortButton(
@@ -704,10 +634,6 @@ export default function WuPrecinctAnalysisPage() {
     }),
     [rows, view],
   );
-  const strongest = useMemo(
-    () => [...viewSummaries].sort((a, b) => b.rSquared - a.rSquared)[0],
-    [viewSummaries],
-  );
   const workedExample = summaries.find(
     (summary) => summary.view === "challenger"
       && summary.raceId === "suffolk-middlesex"
@@ -727,7 +653,7 @@ export default function WuPrecinctAnalysisPage() {
       const name = candidateName(row, view).toLowerCase();
       const searchText = [
         row.district,
-        row.race_label,
+        RACE_SHORT[row.race_id],
         `ward ${row.ward}`,
         `precinct ${row.precinct}`,
         `pct ${row.precinct}`,
@@ -784,43 +710,24 @@ export default function WuPrecinctAnalysisPage() {
   }
 
   return (
-    <main className="analysis-page">
-      <header className="site-header analysis-site-header">
-        <a className="brand" href="/" aria-label="Primary Atlas home">
-          <span className="brand-mark"><i /><i /><i /></span>
-          <span>PRIMARY ATLAS</span>
-        </a>
-        <nav aria-label="Page sections">
-          <a href="#summary">Summary</a>
-          <a href="#pooled">Pooled view</a>
-          <a href="#comparisons">Comparisons</a>
-          <a href="#table">Data</a>
-          <a href="#method">Method</a>
-        </nav>
-        <a className="header-download" href="/assets/data/wu_precinct_analysis.csv" download>
-          Download data
-        </a>
-      </header>
-
-      <section className="analysis-hero" id="top">
+    <main className="analysis-page" id="top">
+      <SiteHeader active="wu" />
+      <PageSections links={[["#summary", "Findings"], ["#pooled", "Combined view"], ["#comparisons", "By race"], ["#table", "Data"], ["#method", "Method"], ["#sources", "Sources"]]} />
+      <section className="analysis-hero" id="main-content" tabIndex={-1}>
         <div className="analysis-hero-copy">
           <p className="kicker">Boston precinct analysis · 2026 Democratic primary</p>
-          <h1>Where Wu was strong, how did the Senate candidates run?</h1>
+          <h1>Wu strongholds and the Senate challengers</h1>
           <p className="analysis-deck">
             Three State Senate races, compared with Michelle Wu&apos;s precinct results in the 2021 preliminary,
             2021 final, and 2025 preliminary mayoral elections.
           </p>
+          <p className="analysis-denominator-note">Candidate shares use only the two named candidates’ votes. Gayle–Collins excludes Juwan Skeens; all comparisons exclude blanks and other votes. Wu shares use all valid mayoral votes.</p>
           <div className="scope-note">
             <strong>This compares places, not changes over time.</strong>
             <span>Each dot is one Boston precinct. The Senate result is always from 2026; the three Wu elections are alternative historical measures of local Wu strength.</span>
           </div>
         </div>
-        <aside className="analysis-question-card">
-          <p className="eyebrow">The question</p>
-          <h2>Was candidate support higher in precincts where Wu had been stronger?</h2>
-          <p>The page starts with challengers, then lets you switch to the candidate Wu endorsed. The two views differ only in the Yu–Rush race.</p>
-          <a href="#method">Read how to interpret the charts ↓</a>
-        </aside>
+
       </section>
 
       <section className="analysis-controls" aria-label="Analysis view">
@@ -875,16 +782,11 @@ export default function WuPrecinctAnalysisPage() {
           These are modeled precinct differences, not individual voter behavior and not a before-and-after change. The fitted estimates are weighted by the number of 2026 two-candidate votes in each precinct.
         </p>
 
-        <div className="finding-grid">
-          <article>
-            <span>Strongest pattern</span>
-            <h3>{strongest?.candidate} · {strongest?.wuMeasureLabel}</h3>
-            <p>{strongest ? `${signedPoints(strongest.weakToStrongDifferencePp)} between typical Wu-weak and Wu-strong precincts; the weighted fit explains ${percent(strongest.rSquared * 100, 0)} of precinct variation.` : ""}</p>
-          </article>
+        <div className="finding-grid concise-findings">
           <article>
             <span>Gayle comparison</span>
             <h3>The Wu measure matters</h3>
-            <p>The Gayle relationship is much weaker using the 2021 preliminary ({signedPoints(firstSuffolk[0]?.weakToStrongDifferencePp ?? 0)}) than using the 2021 final or 2025 preliminary ({signedPoints(firstSuffolk[1]?.weakToStrongDifferencePp ?? 0)} to {signedPoints(firstSuffolk[2]?.weakToStrongDifferencePp ?? 0)}).</p>
+            <p>The Gayle relationship is weaker using the 2021 preliminary ({signedPoints(firstSuffolk[0]?.weakToStrongDifferencePp ?? 0)}) than using the 2021 final ({signedPoints(firstSuffolk[1]?.weakToStrongDifferencePp ?? 0)}) or 2025 preliminary ({signedPoints(firstSuffolk[2]?.weakToStrongDifferencePp ?? 0)}).</p>
           </article>
           <article>
             <span>Endorsement wrinkle</span>
@@ -927,7 +829,7 @@ export default function WuPrecinctAnalysisPage() {
             <aside className="pooled-reading">
               <p>{pooledMeasureDefinition.short}</p>
               <h3>{signedPoints(pooledModel.weakToStrongDifference)}</h3>
-              <span>modeled rise in pooled challenger support</span>
+              <span>estimated difference: Wu-stronger minus Wu-weaker precincts</span>
               <dl>
                 <div>
                   <dt>Typical Wu-weaker precinct</dt>
@@ -940,7 +842,7 @@ export default function WuPrecinctAnalysisPage() {
               </dl>
               <strong>Race-adjusted check</strong>
               <p>
-                The simple pooled slope is {signedPoints(pooledModel.slope * 10)} of challenger support per 10-point increase in Wu share. Giving each race its own baseline produces {signedPoints(pooledModel.adjustedSlope * 10)}—almost the same result.
+                Using the same two Wu values, the estimated difference is {signedPoints(pooledModel.weakToStrongDifference)} when all precincts are pooled, versus {signedPoints(pooledModel.adjustedSlope * (pooledModel.wuStrong - pooledModel.wuWeak))} when each race gets its own baseline.
               </p>
               <small>The race-adjusted fit explains {percent(pooledModel.adjustedRSquared * 100, 0)} of the within-race variation. It controls for different average candidate support across the three contests, not for demographics or campaign effects.</small>
             </aside>
@@ -948,7 +850,7 @@ export default function WuPrecinctAnalysisPage() {
         ) : null}
         <div className="pooled-conclusion">
           <strong>What the pooled chart adds</strong>
-          <p>All three challengers ran better in Wu-stronger precincts, including Yu, whom Wu did not endorse. Pooling therefore strengthens the evidence for a broader geographic alignment with progressive or change-oriented voters; it does not isolate an endorsement effect or show how individual Wu voters cast their Senate ballots.</p>
+          <p>All three challengers generally ran better in Wu-stronger precincts, including Yu, whom Wu did not endorse. This is shared voting geography. It does not measure voter ideology, isolate an endorsement effect, or show how individual Wu voters cast their Senate ballots.</p>
         </div>
       </section>
 
@@ -958,7 +860,7 @@ export default function WuPrecinctAnalysisPage() {
             <p className="section-number">03 / INSPECT THE DOTS</p>
             <h2>Three races, three Wu comparisons each</h2>
             <p>
-              Each race now appears once. Inside each race panel, the three compact plots compare the same 2026 candidate result with Wu&apos;s 2021 preliminary, 2021 final, and 2025 preliminary results. Hover or tap a dot for that precinct&apos;s values; dot size represents the 2026 two-candidate vote.
+              Inside each race panel, the three plots compare the same 2026 candidate result with Wu&apos;s 2021 preliminary, 2021 final, and 2025 preliminary results. Hover or tap a dot for that precinct&apos;s values; dot size represents the 2026 two-candidate vote.
             </p>
           </div>
           <label className="scale-toggle">
@@ -967,8 +869,8 @@ export default function WuPrecinctAnalysisPage() {
           </label>
         </div>
         <div className="comparison-key">
-          <strong>Every line is now directly tied to the printed number.</strong>
-          <span><i className="comparison-key-segment" aria-hidden="true" /> The orange segment joins the fitted candidate result at the 25th and 75th percentiles of Wu&apos;s vote. Its vertical rise or fall is exactly the point difference printed above the plot.</span>
+          <strong>Read the labeled difference, not the line’s angle.</strong>
+          <span><i className="comparison-key-segment" aria-hidden="true" /> The orange segment joins the estimated candidate shares at the 25th and 75th percentiles of Wu&apos;s vote. Its vertical difference equals the number above the plot. Line angles also depend on the horizontal spread and axis scale.</span>
           <span><i className="comparison-key-half" aria-hidden="true" /> The dashed horizontal line marks 50% candidate support. Light solid lines are ordinary scale guides.{!fullScale ? " The charts enlarge the observed ranges; use the toggle for the full 0–100% view." : " The full 0–100% scale is shown."}</span>
         </div>
 
@@ -1100,6 +1002,7 @@ export default function WuPrecinctAnalysisPage() {
             <p>Everything needed to reproduce or challenge the analysis is downloadable below.</p>
           </div>
         </div>
+        <details className="reader-details"><summary>Data, geography, and comparison method</summary>
         <div className="method-explainer-grid">
           <article>
             <span>1</span>
@@ -1126,6 +1029,8 @@ export default function WuPrecinctAnalysisPage() {
           <strong>How the pooled chart is checked</strong>
           <p>The visible orange segment comes from one vote-weighted line across all 156 precincts. Because the three contests have different average challenger results and cover different parts of Boston, the page also fits a common Wu slope while giving each race its own baseline. Similar pooled and race-adjusted slopes mean the combined pattern is not merely an artifact of one contest starting at a higher average level.</p>
         </div>
+        </details>
+        <details className="reader-details"><summary>How the orange line is calculated · Lander worked example</summary>
         {workedExample ? (
           <div className="model-detail">
             <article>
@@ -1160,10 +1065,12 @@ export default function WuPrecinctAnalysisPage() {
             </article>
           </div>
         ) : null}
+        </details>
         <div className="caution-box">
           <strong>Ecological caution</strong>
           <p>A precinct pattern is not an individual-voter pattern. The analysis can show where support overlapped geographically; it cannot identify who voted for whom, prove an endorsement caused the result, or separate endorsement effects from demographics, incumbency, campaigning, and other local factors.</p>
         </div>
+        <details className="reader-details"><summary>Validation and reproducibility downloads</summary>
         <div className="qa-strip">
           <article><span>Boundary versions</span><strong>{qa.crosswalk.oldPrecinctCount} → {qa.crosswalk.currentPrecinctCount}</strong><small>Boston precincts, 2021 to current</small></article>
           <article><span>Crosswalk rows</span><strong>{number(qa.crosswalk.crosswalkRowCount)}</strong><small>old-to-current geographic contributions</small></article>
@@ -1172,10 +1079,11 @@ export default function WuPrecinctAnalysisPage() {
         </div>
         <div className="method-downloads">
           <a href="/assets/data/wu_analysis_qa.json" download>QA report (JSON)</a>
-          <a href="/assets/data/wu_precinct_summary.csv" download>Regression summary (CSV)</a>
+          <a href="/assets/data/wu_precinct_summary.csv" download>Comparison summary (CSV)</a>
           <a href="/assets/data/wu_2021_to_2022_precinct_crosswalk.csv" download>2021-to-current crosswalk (CSV)</a>
           <a href="https://github.com/yepogue/election_result_map/blob/main/docs/WU_PRECINCT_ANALYSIS_METHOD.md" target="_blank" rel="noreferrer">Detailed methodology ↗</a>
         </div>
+        </details>
       </section>
 
       <section className="analysis-sources-section" id="sources">
@@ -1197,7 +1105,7 @@ export default function WuPrecinctAnalysisPage() {
         </div>
         <div className="endorsement-note">
           <strong>Endorsement context</strong>
-          <p>Gayle&apos;s campaign lists Mayor Wu&apos;s endorsement; contemporary reporting documents Wu&apos;s endorsements of Lander and Rush. The endorsement-aligned view is a sensitivity check because the request&apos;s literal “challenger” definition includes Yu, whom Wu did not endorse.</p>
+          <p>Gayle&apos;s campaign lists Mayor Wu&apos;s endorsement; contemporary reporting documents Wu&apos;s endorsements of Lander and Rush. The Wu-endorsed view substitutes Rush for Yu; the challenger view shows Gayle, Lander, and Yu.</p>
           <div>
             <a href="https://www.latoyaforsenate.com/endorsements" target="_blank" rel="noreferrer">Gayle campaign ↗</a>
             <a href="https://www.thecrimson.com/article/2026/6/22/wu-endorses-lander/" target="_blank" rel="noreferrer">Lander endorsement report ↗</a>
@@ -1212,6 +1120,7 @@ export default function WuPrecinctAnalysisPage() {
           <h2>Latest updates</h2>
         </div>
         <ul>
+          <li><b>October 1, 2026:</b> Reviewed calculations; simplified navigation and summary charts; clarified the pooled interpretation and moved technical explanations into expandable sections.</li>
           <li><b>September 24, 2026:</b> Added a one-chart pooled challenger view and a race-adjusted check of the shared Wu relationship.</li>
           <li><b>September 21, 2026:</b> Published the Boston precinct comparison for three 2026 State Senate Democratic primaries using the post-recount Brownsberger–Lander export.</li>
           <li><b>September 21, 2026:</b> Added challenger and Wu-endorsed views, the 2021 boundary crosswalk, QA downloads, and original-source links.</li>
@@ -1220,14 +1129,7 @@ export default function WuPrecinctAnalysisPage() {
         </ul>
       </section>
 
-      <footer className="analysis-footer">
-        <a className="brand" href="/">
-          <span className="brand-mark"><i /><i /><i /></span>
-          <span>PRIMARY ATLAS</span>
-        </a>
-        <p>Independent, source-linked precinct analysis.</p>
-        <a href="/">Return to the election map ↑</a>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }

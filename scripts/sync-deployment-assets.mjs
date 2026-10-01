@@ -23,6 +23,9 @@ const files = [
   "wu_2021_to_2022_precinct_crosswalk.csv",
   "wu_analysis_qa.json",
   "wu_analysis_sources.json",
+  "precinct_factor_analysis.json",
+  "precinct_factor_effects.csv",
+  "precinct_factor_analysis_qa.json",
 ];
 
 mkdirSync(targetDir, { recursive: true });

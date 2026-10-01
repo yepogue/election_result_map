@@ -1,0 +1,18 @@
+outcome,factor_id,factor_label,factor_group,q25_pct,q75_pct,raw_difference_pp,raw_ci_low_pp,raw_ci_high_pp,adjusted_difference_pp,adjusted_ci_low_pp,adjusted_ci_high_pp
+share,age18_34,Residents age 18–34,Age,25.3,66.2,-16.24869,-22.525563,-9.971818,-0.329511,-10.246369,9.587348
+share,age65_plus,Residents age 65+,Age,6.95,18.4,8.770384,2.263889,15.27688,3.087161,0.21514,5.959183
+share,bachelors_plus,Bachelor’s degree or higher,Social and economic,67.75,82.45,4.697684,-1.057505,10.452873,-0.473272,-3.883493,2.936948
+share,renters,Renter households,Social and economic,53.8,84.15,-12.982962,-17.727274,-8.23865,-6.431534,-9.920277,-2.942792
+share,income_below_50k,Household income below $50k,Social and economic,13.7,35.75,-13.09607,-19.437384,-6.754756,-2.919689,-6.773786,0.934409
+share,hispanic,Hispanic residents,Race and ethnicity,6.15,11.6,-8.417403,-12.889415,-3.945391,-1.801728,-4.399341,0.795886
+share,black,Non-Hispanic Black residents,Race and ethnicity,2.15,6.85,-8.966665,-13.888798,-4.044532,-0.867039,-3.463404,1.729326
+share,asian,Non-Hispanic Asian residents,Race and ethnicity,12.55,21.6,0.609126,-4.992424,6.210676,-1.297555,-3.858531,1.263421
+share,turnout,Overall primary turnout,Participation,17.0104,31.1389,12.553233,6.384893,18.721572,6.382726,0.228466,12.536986
+turnout,age18_34,Residents age 18–34,Age,25.3,66.2,-13.005151,-15.211945,-10.798357,-6.146666,-11.116817,-1.176515
+turnout,age65_plus,Residents age 65+,Age,6.95,18.4,8.121277,2.05628,14.186274,2.757959,-0.41261,5.928528
+turnout,bachelors_plus,Bachelor’s degree or higher,Social and economic,67.75,82.45,1.230062,-2.616966,5.077091,-0.835354,-3.128188,1.457479
+turnout,renters,Renter households,Social and economic,53.8,84.15,-9.108326,-12.778333,-5.43832,-4.896455,-9.665425,-0.127485
+turnout,income_below_50k,Household income below $50k,Social and economic,13.7,35.75,-10.620301,-13.577103,-7.663499,-4.251819,-6.916598,-1.587039
+turnout,hispanic,Hispanic residents,Race and ethnicity,6.15,11.6,-5.433362,-7.342604,-3.52412,-1.721112,-3.099594,-0.34263
+turnout,black,Non-Hispanic Black residents,Race and ethnicity,2.15,6.85,-4.492081,-7.58905,-1.395113,-0.734368,-2.646359,1.177623
+turnout,asian,Non-Hispanic Asian residents,Race and ethnicity,12.55,21.6,-4.815883,-7.685576,-1.946189,-2.223111,-3.862821,-0.583401

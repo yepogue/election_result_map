@@ -1,5 +1,15 @@
 [
   {
+    "date": "October 1, 2026",
+    "title": "Election overview and site-wide review",
+    "items": [
+      "Added a results-first landing page and consistent navigation to the election map, Wu comparisons, and community-factor analysis, including on mobile.",
+      "Simplified charts and explanations; retained methods, downloads, and source links without adding a coefficient display.",
+      "Independently reproduced all 18 Wu comparison estimates and 34 community-factor estimates and intervals; checked cross-page vote counts and crosswalk weights.",
+      "Corrected source descriptions and clarified that precinct associations do not establish voter ideology, endorsement effects, or independent demographic causes."
+    ]
+  },
+  {
     "date": "September 11, 2026",
     "title": "Community context added to the precinct map",
     "items": [

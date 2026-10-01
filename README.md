@@ -5,17 +5,20 @@ An interactive, source-linked precinct map for the September 1, 2026 Democratic 
 ## What is included
 
 - All 59 district precincts, using official MassGIS 2022 ward and precinct boundaries.
-- Precinct-level votes for Will Brownsberger and Max Lander.
+- Precinct-level votes for William Brownsberger and Daniel Lander.
 - Turnout calculated from ballots cast and registered voters.
 - Simultaneous candidate-lead color and turnout-size encoding, plus a turnout-only view.
 - Explicit map color thresholds and municipal Brownsberger vote shares.
 - Hover, single-tap mobile details, keyboard access, search, municipality filters, and sortable table columns.
 - Downloadable CSV results and GeoJSON boundaries.
 - Direct links to the original municipal election files and state boundary sources.
-- Census ACS/CVAP context links and a documented path for obtaining aggregate primary-voter enrollment splits.
+- Estimated Census ACS context on the map, with source links and a documented allocation method.
 - A plain-language change log at the bottom of the published dashboard.
 - A separate `/wu-precinct-analysis` page comparing three 2026 Boston State Senate results with Michelle Wu's 2021 and 2025 precinct strength.
 - Downloadable Wu-analysis rows, modeled summaries, the 2021-to-current precinct crosswalk, and an automated QA report.
+- A concise landing page at `/` (also available at `/overview`), with the election map at `/election-map`.
+- Community-factor comparisons at `/precinct-factor-analysis`, without a coefficient display.
+- Identical navigation across all pages, including on mobile. Previous root map-section bookmarks still work.
 
 The headline, map, table, and municipal totals all use the Secretary of the Commonwealth's certified post-recount precinct export. Registration and overall election turnout remain sourced from municipal precinct reports.
 
@@ -27,7 +30,8 @@ The headline, map, table, and municipal totals all use the Secretary of the Comm
 4. Update final district totals, status, and dates in `public/data/election.json`.
 5. Add a plain-language release note to `public/data/changelog.json`.
 6. Export the sheet as a UTF-8 CSV with the same filename.
-7. Run the validation and build commands below.
+7. Rebuild the community analysis with `python scripts/build_precinct_factor_analysis.py` (requires NumPy and pandas). Refresh the Wu data too if election inputs changed; see below.
+8. Run `python scripts/review_analysis.py`, then the validation and build commands below. This independently checks displayed estimates and cross-page consistency without modifying data.
 
 See `MAINTENANCE.md` for the field definitions, expected totals, and a release checklist.
 
