@@ -26,6 +26,9 @@ const files = [
   "precinct_factor_analysis.json",
   "precinct_factor_effects.csv",
   "precinct_factor_analysis_qa.json",
+  "renter_analysis.json",
+  "renter_precincts.csv",
+  "renter_municipality_summary.csv",
 ];
 
 mkdirSync(targetDir, { recursive: true });

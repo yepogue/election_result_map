@@ -7,6 +7,7 @@ const pages = [
   { id: "map", href: "/election-map", label: "Election map" },
   { id: "wu", href: "/wu-precinct-analysis", label: "Wu comparisons" },
   { id: "factors", href: "/precinct-factor-analysis", label: "Community factors" },
+  { id: "renters", href: "/renters-voting", label: "Renters & voting" },
 ];
 
 export function SiteHeader({ active }: { active: string }) {

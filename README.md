@@ -18,6 +18,7 @@ An interactive, source-linked precinct map for the September 1, 2026 Democratic 
 - Downloadable Wu-analysis rows, modeled summaries, the 2021-to-current precinct crosswalk, and an automated QA report.
 - A concise landing page at `/` (also available at `/overview`), with the election map at `/election-map`.
 - Community-factor comparisons at `/precinct-factor-analysis`, without a coefficient display.
+- A focused renter-share comparison at `/renters-voting`, with municipality summaries and equal-precinct OLS comparisons with/without municipality fixed effects.
 - Identical navigation across all pages, including on mobile. Previous root map-section bookmarks still work.
 
 The headline, map, table, and municipal totals all use the Secretary of the Commonwealth's certified post-recount precinct export. Registration and overall election turnout remain sourced from municipal precinct reports.
@@ -46,6 +47,13 @@ powershell -ExecutionPolicy Bypass -File scripts/update-wu-analysis.ps1 --refres
 The script creates its own Python environment, rebuilds the public downloads, and writes a QA report. Review `public/data/wu_analysis_qa.json` before publishing. The full allocation and comparison method is in `docs/WU_PRECINCT_ANALYSIS_METHOD.md`.
 
 ## Run locally
+
+To rebuild the renter comparison after changing its input snapshot, run
+`python scripts/build_renter_analysis.py` with NumPy, pandas, and SciPy installed.
+Then run `python scripts/review_renter_analysis.py`. Both use the existing local
+source data; neither downloads or changes the source election or Census files.
+The page and its CSV/JSON downloads read the same generated results. Site builds
+copy these downloads into the deployment assets automatically.
 
 ```bash
 npm install
