@@ -1022,6 +1022,11 @@ footer > a { justify-self: end; color: #b5b8b2; font-size: 11px; }
 .renter-downloads a:hover { background: #e9f1f5; }
 .renter-sources { padding-left: 20px; margin: 22px 0; list-style: disc; }
 .renter-sources li { font-size: 14px; line-height: 1.8; margin: 10px 0; }
+.challenger-renters > .kicker { font-size: 12px; margin-bottom: 12px; }
+.challenger-answer { margin-bottom: 28px; }
+.challenger-renter-grid { margin-top: 28px; }
+.challenger-race-key { flex-direction: column; gap: 6px; }
+.renter-additional-link a { color: #174e6c; text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 1000px) {
   .renter-explorer-grid { grid-template-columns: 1fr; gap: 22px; }
   .renter-explorer-grid > div { max-width: 700px; }

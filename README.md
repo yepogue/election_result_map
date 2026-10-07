@@ -55,6 +55,15 @@ source data; neither downloads or changes the source election or Census files.
 The page and its CSV/JSON downloads read the same generated results. Site builds
 copy these downloads into the deployment assets automatically.
 
+The same page includes a Boston-only pooled comparison of Gayle, Lander, and Yu.
+Run `python scripts/build_challenger_renter_analysis.py` then
+`python scripts/review_challenger_renter_analysis.py` to rebuild and verify it.
+It uses the frozen Wu-analysis vote export and the existing Wu/Census source
+caches (restore those with their update scripts if absent), with the Census
+geospatial dependencies plus NumPy/SciPy. It does not refresh the elections or
+modify the original 59-precinct analysis. The exported crosswalk includes ACS
+numerators, denominators, and housing weights for independent reproduction.
+
 ```bash
 npm install
 npm run dev

@@ -1,0 +1,157 @@
+precinct_id,label,ward,precinct,race_id,district,challenger,incumbent,renterSharePct,allocated_renter,allocated_occupied,challenger_votes,incumbent_votes,extra_candidate_votes,two_candidate_votes,challengerSharePct,renterDeviationPp,challengerDeviationPp
+BOS-13-10,"Boston · Ward 13, Precinct 10",13,10,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,52.60000000,669.77722493,1272.35804980,189,325,9,514,36.77042802,-5.97560976,-9.08792837
+BOS-13-3,"Boston · Ward 13, Precinct 3",13,3,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,92.10000000,1693.48353293,1839.69011976,88,56,5,144,61.11111111,33.52439024,15.25275472
+BOS-13-5,"Boston · Ward 13, Precinct 5",13,5,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,63.90000000,433.46940298,678.08026596,97,81,6,178,54.49438202,5.32439024,8.63602563
+BOS-13-6,"Boston · Ward 13, Precinct 6",13,6,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,62.70000000,498.47599008,795.29032134,113,90,9,203,55.66502463,4.12439024,9.80666824
+BOS-13-7,"Boston · Ward 13, Precinct 7",13,7,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,50.20000000,397.25285676,791.47035356,121,95,1,216,56.01851852,-8.37560976,10.16016213
+BOS-13-8,"Boston · Ward 13, Precinct 8",13,8,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,60.60000000,477.46397620,788.38443585,113,76,0,189,59.78835979,2.02439024,13.93000340
+BOS-13-9,"Boston · Ward 13, Precinct 9",13,9,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,59.00000000,517.83314852,877.36486198,159,111,2,270,58.88888889,0.42439024,13.03053250
+BOS-15-1,"Boston · Ward 15, Precinct 1",15,1,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,67.90000000,650.24164003,957.52018689,73,87,5,160,45.62500000,9.32439024,-0.23335639
+BOS-15-2,"Boston · Ward 15, Precinct 2",15,2,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,74.30000000,501.62353298,675.45365162,47,42,6,89,52.80898876,15.72439024,6.95063238
+BOS-15-3,"Boston · Ward 15, Precinct 3",15,3,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,79.90000000,440.55607557,551.51789545,33,43,2,76,43.42105263,21.32439024,-2.43730376
+BOS-15-4,"Boston · Ward 15, Precinct 4",15,4,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,67.70000000,603.15441611,890.38530115,122,120,7,242,50.41322314,9.12439024,4.55486675
+BOS-15-5,"Boston · Ward 15, Precinct 5",15,5,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,69.40000000,630.74154410,908.95626938,71,65,5,136,52.20588235,10.82439024,6.34752596
+BOS-15-6,"Boston · Ward 15, Precinct 6",15,6,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,81.20000000,530.79555661,653.78438754,91,67,1,158,57.59493671,22.62439024,11.73658032
+BOS-15-7,"Boston · Ward 15, Precinct 7",15,7,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,65.10000000,400.29331981,614.71871665,74,49,1,123,60.16260163,6.52439024,14.30424524
+BOS-15-8,"Boston · Ward 15, Precinct 8",15,8,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,62.10000000,300.09694322,483.63049783,38,68,3,106,35.84905660,3.52439024,-10.00929978
+BOS-15-9,"Boston · Ward 15, Precinct 9",15,9,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,71.30000000,470.34722231,659.43189268,81,36,7,117,69.23076923,12.72439024,23.37241284
+BOS-16-1,"Boston · Ward 16, Precinct 1",16,1,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,55.50000000,383.38950366,690.76820259,93,68,8,161,57.76397516,-3.07560976,11.90561877
+BOS-16-10,"Boston · Ward 16, Precinct 10",16,10,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,40.00000000,382.45466980,955.00406988,81,189,5,270,30.00000000,-18.57560976,-15.85835639
+BOS-16-11,"Boston · Ward 16, Precinct 11",16,11,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,47.40000000,226.53797126,477.61707547,75,151,7,226,33.18584071,-11.17560976,-12.67251568
+BOS-16-12,"Boston · Ward 16, Precinct 12",16,12,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,35.40000000,261.14032010,736.64444164,57,400,4,457,12.47264770,-23.17560976,-33.38570869
+BOS-16-2,"Boston · Ward 16, Precinct 2",16,2,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,35.90000000,181.54341479,505.74191209,85,97,1,182,46.70329670,-22.67560976,0.84494032
+BOS-16-3,"Boston · Ward 16, Precinct 3",16,3,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,62.60000000,797.48584111,1274.36330935,146,86,5,232,62.93103448,4.02439024,17.07267809
+BOS-16-4,"Boston · Ward 16, Precinct 4",16,4,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,52.60000000,465.76496837,885.80318315,111,89,5,200,55.50000000,-5.97560976,9.64164361
+BOS-16-5,"Boston · Ward 16, Precinct 5",16,5,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,52.90000000,677.07486455,1280.02405754,143,122,14,265,53.96226415,-5.67560976,8.10390776
+BOS-16-6,"Boston · Ward 16, Precinct 6",16,6,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,55.10000000,685.06266860,1242.99060806,180,119,6,299,60.20066890,-3.47560976,14.34231251
+BOS-16-7,"Boston · Ward 16, Precinct 7",16,7,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,51.70000000,449.02705025,869.35704693,105,198,3,303,34.65346535,-6.87560976,-11.20489104
+BOS-16-8,"Boston · Ward 16, Precinct 8",16,8,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,53.80000000,825.76752255,1533.83657183,242,293,9,535,45.23364486,-4.77560976,-0.62471153
+BOS-16-9,"Boston · Ward 16, Precinct 9",16,9,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,43.00000000,357.36470773,831.41609051,90,301,4,391,23.01790281,-15.57560976,-22.84045357
+BOS-17-1,"Boston · Ward 17, Precinct 1",17,1,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,53.40000000,526.30161725,984.88652291,75,68,6,143,52.44755245,-5.17560976,6.58919606
+BOS-17-10,"Boston · Ward 17, Precinct 10",17,10,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,53.30000000,527.23789806,989.69934710,78,97,43,175,44.57142857,-5.27560976,-1.28692782
+BOS-17-11,"Boston · Ward 17, Precinct 11",17,11,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,77.10000000,214.75407166,278.67752443,68,32,7,100,68.00000000,18.52439024,22.14164361
+BOS-17-12,"Boston · Ward 17, Precinct 12",17,12,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,33.90000000,212.68906964,627.99448164,102,82,7,184,55.43478261,-24.67560976,9.57642622
+BOS-17-13,"Boston · Ward 17, Precinct 13",17,13,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,53.40000000,499.86999587,936.55665132,193,129,10,322,59.93788820,-5.17560976,14.07953181
+BOS-17-14,"Boston · Ward 17, Precinct 14",17,14,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,36.20000000,283.06724493,782.55634470,183,162,13,345,53.04347826,-22.37560976,7.18512187
+BOS-17-2,"Boston · Ward 17, Precinct 2",17,2,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,53.10000000,293.82720000,553.72160000,75,59,9,134,55.97014925,-5.47560976,10.11179287
+BOS-17-3,"Boston · Ward 17, Precinct 3",17,3,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,67.90000000,703.90541247,1036.31830899,220,112,16,332,66.26506024,9.32439024,20.40670385
+BOS-17-4,"Boston · Ward 17, Precinct 4",17,4,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,44.90000000,525.00543339,1168.84580656,259,193,18,452,57.30088496,-13.67560976,11.44252857
+BOS-17-5,"Boston · Ward 17, Precinct 5",17,5,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,60.10000000,432.04750130,718.51642762,50,46,2,96,52.08333333,1.52439024,6.22497695
+BOS-17-6,"Boston · Ward 17, Precinct 6",17,6,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,34.40000000,247.51415889,719.30335731,174,86,6,260,66.92307692,-24.17560976,21.06472053
+BOS-17-7,"Boston · Ward 17, Precinct 7",17,7,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,42.60000000,190.71611193,448.13633310,45,49,21,94,47.87234043,-15.97560976,2.01398404
+BOS-17-8,"Boston · Ward 17, Precinct 8",17,8,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,56.60000000,489.15636084,864.76330575,88,70,8,158,55.69620253,-1.97560976,9.83784614
+BOS-17-9,"Boston · Ward 17, Precinct 9",17,9,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,60.10000000,373.24592834,621.32247557,169,87,7,256,66.01562500,1.52439024,20.15726861
+BOS-03-14,"Boston · Ward 3, Precinct 14",3,14,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,73.90000000,1013.55645161,1370.97580645,232,138,7,370,62.70270270,15.32439024,16.84434631
+BOS-03-15,"Boston · Ward 3, Precinct 15",3,15,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,91.40000000,1305.41620112,1428.30726257,94,124,2,218,43.11926606,32.82439024,-2.73909033
+BOS-03-16,"Boston · Ward 3, Precinct 16",3,16,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,42.00000000,500.33421899,1190.37193610,197,244,6,441,44.67120181,-16.57560976,-1.18715457
+BOS-03-7,"Boston · Ward 3, Precinct 7",3,7,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,45.20000000,533.71794872,1181.98632479,114,169,6,283,40.28268551,-13.37560976,-5.57567088
+BOS-03-8,"Boston · Ward 3, Precinct 8",3,8,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,89.50000000,1843.30543933,2060.23849372,180,137,9,317,56.78233438,30.92439024,10.92397800
+BOS-04-1,"Boston · Ward 4, Precinct 1",4,1,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,47.70000000,472.92969871,991.15064562,108,171,4,279,38.70967742,-10.87560976,-7.14867897
+BOS-04-2,"Boston · Ward 4, Precinct 2",4,2,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,64.90000000,825.00000000,1271.00000000,107,166,8,273,39.19413919,6.32439024,-6.66421719
+BOS-04-3,"Boston · Ward 4, Precinct 3",4,3,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,66.40000000,969.00000000,1459.00000000,216,185,17,401,53.86533666,7.82439024,8.00698027
+BOS-04-4,"Boston · Ward 4, Precinct 4",4,4,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,56.30000000,779.11965812,1384.34615385,161,204,5,365,44.10958904,-2.27560976,-1.74876735
+BOS-04-5,"Boston · Ward 4, Precinct 5",4,5,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,79.10000000,1280.98006645,1619.88039867,133,141,4,274,48.54014599,20.52439024,2.68178960
+BOS-05-1,"Boston · Ward 5, Precinct 1",5,1,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,88.30000000,937.72190794,1062.47843725,184,102,1,286,64.33566434,29.72439024,18.47730795
+BOS-05-13,"Boston · Ward 5, Precinct 13",5,13,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,61.30000000,657.21989529,1072.58115183,193,176,4,369,52.30352304,2.72439024,6.44516665
+BOS-05-14,"Boston · Ward 5, Precinct 14",5,14,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,43.10000000,320.07030129,742.84935438,99,165,3,264,37.50000000,-15.47560976,-8.35835639
+BOS-06-1,"Boston · Ward 6, Precinct 1",6,1,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,38.00000000,526.00000000,1386.00000000,139,230,7,369,37.66937669,-20.57560976,-8.18897969
+BOS-06-10,"Boston · Ward 6, Precinct 10",6,10,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,62.00000000,706.00000000,1138.00000000,68,124,5,192,35.41666667,3.42439024,-10.44168972
+BOS-06-11,"Boston · Ward 6, Precinct 11",6,11,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,72.10000000,1297.00000000,1798.00000000,144,125,4,269,53.53159851,13.52439024,7.67324212
+BOS-06-12,"Boston · Ward 6, Precinct 12",6,12,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,79.60000000,2083.00000000,2617.00000000,104,158,7,262,39.69465649,21.02439024,-6.16369990
+BOS-06-2,"Boston · Ward 6, Precinct 2",6,2,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,61.10000000,651.00000000,1066.00000000,65,105,3,170,38.23529412,2.52439024,-7.62306227
+BOS-06-3,"Boston · Ward 6, Precinct 3",6,3,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,74.50000000,971.90549075,1304.60554518,70,139,4,209,33.49282297,15.92439024,-12.36553342
+BOS-06-4,"Boston · Ward 6, Precinct 4",6,4,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,37.80000000,208.61230284,552.07476894,70,145,2,215,32.55813953,-20.77560976,-13.30021685
+BOS-06-5,"Boston · Ward 6, Precinct 5",6,5,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,40.50000000,345.00000000,851.00000000,61,168,9,229,26.63755459,-18.07560976,-19.22080180
+BOS-06-6,"Boston · Ward 6, Precinct 6",6,6,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,50.10000000,524.00000000,1046.00000000,69,238,2,307,22.47557003,-8.47560976,-23.38278636
+BOS-06-7,"Boston · Ward 6, Precinct 7",6,7,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,27.20000000,309.00000000,1136.00000000,48,201,2,249,19.27710843,-31.37560976,-26.58124795
+BOS-06-8,"Boston · Ward 6, Precinct 8",6,8,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,61.50000000,627.13179756,1019.87170492,67,279,4,346,19.36416185,2.92439024,-26.49419454
+BOS-06-9,"Boston · Ward 6, Precinct 9",6,9,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,52.40000000,638.30136986,1219.09589041,60,273,7,333,18.01801802,-6.17560976,-27.84033837
+BOS-07-1,"Boston · Ward 7, Precinct 1",7,1,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,54.00000000,406.84367974,753.75378519,43,258,6,301,14.28571429,-4.57560976,-31.57264210
+BOS-07-10,"Boston · Ward 7, Precinct 10",7,10,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,70.10000000,641.94697130,915.66457228,69,76,8,145,47.58620690,11.52439024,1.72785051
+BOS-07-2,"Boston · Ward 7, Precinct 2",7,2,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,41.00000000,459.16174933,1119.08173839,62,239,2,301,20.59800664,-17.57560976,-25.26034974
+BOS-07-3,"Boston · Ward 7, Precinct 3",7,3,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,60.30000000,783.94280199,1300.46989826,75,267,4,342,21.92982456,1.72439024,-23.92853183
+BOS-07-4,"Boston · Ward 7, Precinct 4",7,4,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,39.90000000,359.45513016,901.97114746,52,142,10,194,26.80412371,-18.67560976,-19.05423268
+BOS-07-5,"Boston · Ward 7, Precinct 5",7,5,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,55.20000000,582.20263372,1054.38357824,108,159,5,267,40.44943820,-3.37560976,-5.40891819
+BOS-07-6,"Boston · Ward 7, Precinct 6",7,6,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,59.50000000,593.20026947,996.76323396,65,137,1,202,32.17821782,0.92439024,-13.68013857
+BOS-07-7,"Boston · Ward 7, Precinct 7",7,7,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,100.00000000,1156.45033113,1156.45033113,30,62,6,92,32.60869565,41.42439024,-13.24966074
+BOS-07-8,"Boston · Ward 7, Precinct 8",7,8,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,53.10000000,638.88791830,1202.58715156,103,117,2,220,46.81818182,-5.47560976,0.95982543
+BOS-07-9,"Boston · Ward 7, Precinct 9",7,9,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,49.90000000,338.86427218,678.84232767,99,86,2,185,53.51351351,-8.67560976,7.65515713
+BOS-08-1,"Boston · Ward 8, Precinct 1",8,1,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,74.10000000,1090.00000000,1471.00000000,206,161,6,367,56.13079019,15.52439024,10.27243380
+BOS-08-2,"Boston · Ward 8, Precinct 2",8,2,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,49.20000000,551.00000000,1120.00000000,134,142,3,276,48.55072464,-9.37560976,2.69236825
+BOS-08-6,"Boston · Ward 8, Precinct 6",8,6,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,77.10000000,410.67290503,532.96888526,16,23,1,39,41.02564103,18.52439024,-4.83271536
+BOS-09-1,"Boston · Ward 9, Precinct 1",9,1,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,71.10000000,1011.87273348,1422.91051382,219,172,2,391,56.01023018,12.52439024,10.15187379
+BOS-09-2,"Boston · Ward 9, Precinct 2",9,2,first-suffolk,First Suffolk,Latoya Gayle,Nicholas Collins,49.90000000,574.00000000,1151.00000000,144,132,3,276,52.17391304,-8.67560976,6.31555666
+BOS-18-10,"Boston · Ward 18, Precinct 10",18,10,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,37.30000000,474.84918691,1272.97888725,490,183,0,673,72.80832095,1.55128205,16.14880279
+BOS-18-11,"Boston · Ward 18, Precinct 11",18,11,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,83.40000000,936.09697696,1122.42549532,118,105,0,223,52.91479821,47.65128205,-3.74471996
+BOS-18-12,"Boston · Ward 18, Precinct 12",18,12,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,27.00000000,255.45137239,946.19933732,235,127,0,362,64.91712707,-8.74871795,8.25760891
+BOS-18-16,"Boston · Ward 18, Precinct 16",18,16,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,31.60000000,265.62500000,840.37500000,208,257,0,465,44.73118280,-4.14871795,-11.92833537
+BOS-18-17,"Boston · Ward 18, Precinct 17",18,17,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,49.20000000,399.96036585,813.33918756,131,155,0,286,45.80419580,13.45128205,-10.85532236
+BOS-18-19,"Boston · Ward 18, Precinct 19",18,19,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,20.60000000,301.68482661,1463.41701715,219,255,0,474,46.20253165,-15.14871795,-10.45698652
+BOS-18-20,"Boston · Ward 18, Precinct 20",18,20,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,44.80000000,586.85385697,1308.90252490,130,283,0,413,31.47699758,9.05128205,-25.18252058
+BOS-18-22,"Boston · Ward 18, Precinct 22",18,22,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,18.60000000,154.08879023,829.41620422,270,195,0,465,58.06451613,-17.14871795,1.40499797
+BOS-18-23,"Boston · Ward 18, Precinct 23",18,23,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,91.60000000,1284.10559006,1402.04347826,84,91,0,175,48.00000000,55.85128205,-8.65951816
+BOS-18-9,"Boston · Ward 18, Precinct 9",18,9,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,29.30000000,261.43125208,893.15314955,260,142,0,402,64.67661692,-6.44871795,8.01709875
+BOS-19-10,"Boston · Ward 19, Precinct 10",19,10,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,30.00000000,303.83588850,1013.53154491,374,176,0,550,68.00000000,-5.74871795,11.34048184
+BOS-19-11,"Boston · Ward 19, Precinct 11",19,11,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,53.70000000,509.62621610,948.24362633,144,88,0,232,62.06896552,17.95128205,5.40944735
+BOS-19-13,"Boston · Ward 19, Precinct 13",19,13,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,42.10000000,276.58124617,656.82771589,190,97,0,287,66.20209059,6.35128205,9.54257243
+BOS-19-2,"Boston · Ward 19, Precinct 2",19,2,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,16.10000000,122.84615385,763.69230769,369,213,0,582,63.40206186,-19.64871795,6.74254369
+BOS-19-3,"Boston · Ward 19, Precinct 3",19,3,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,16.20000000,68.50051282,423.19981352,237,89,0,326,72.69938650,-19.54871795,16.03986834
+BOS-19-5,"Boston · Ward 19, Precinct 5",19,5,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,35.50000000,353.44909423,995.76531407,337,109,0,446,75.56053812,-0.24871795,18.90101995
+BOS-19-8,"Boston · Ward 19, Precinct 8",19,8,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,29.50000000,184.80330124,625.42228336,354,105,0,459,77.12418301,-6.24871795,20.46466484
+BOS-19-9,"Boston · Ward 19, Precinct 9",19,9,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,57.50000000,275.36595965,478.88370591,263,57,0,320,82.18750000,21.75128205,25.52798184
+BOS-20-1,"Boston · Ward 20, Precinct 1",20,1,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,43.40000000,380.95144224,877.65447557,362,190,0,552,65.57971014,7.65128205,8.92019198
+BOS-20-10,"Boston · Ward 20, Precinct 10",20,10,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,30.50000000,352.83978512,1156.83684590,232,336,0,568,40.84507042,-5.24871795,-15.81444774
+BOS-20-11,"Boston · Ward 20, Precinct 11",20,11,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,23.00000000,84.08761250,365.20994683,181,147,0,328,55.18292683,-12.74871795,-1.47659133
+BOS-20-12,"Boston · Ward 20, Precinct 12",20,12,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,16.00000000,94.03293756,586.05492148,153,222,0,375,40.80000000,-19.74871795,-15.85951816
+BOS-20-13,"Boston · Ward 20, Precinct 13",20,13,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,20.30000000,109.23613767,538.74896903,150,162,0,312,48.07692308,-15.44871795,-8.58259509
+BOS-20-14,"Boston · Ward 20, Precinct 14",20,14,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,10.50000000,56.58152808,539.06167228,167,198,0,365,45.75342466,-25.24871795,-10.90609351
+BOS-20-15,"Boston · Ward 20, Precinct 15",20,15,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,21.10000000,193.00000000,914.00000000,184,222,0,406,45.32019704,-14.64871795,-11.33932112
+BOS-20-16,"Boston · Ward 20, Precinct 16",20,16,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,30.10000000,407.95490716,1355.17374005,198,331,0,529,37.42911153,-5.64871795,-19.23040663
+BOS-20-17,"Boston · Ward 20, Precinct 17",20,17,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,22.20000000,239.49618364,1080.38588784,249,321,0,570,43.68421053,-13.54871795,-12.97530764
+BOS-20-18,"Boston · Ward 20, Precinct 18",20,18,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,36.90000000,204.58728910,554.14896407,203,148,0,351,57.83475783,1.15128205,1.17523967
+BOS-20-19,"Boston · Ward 20, Precinct 19",20,19,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,30.70000000,172.99612664,564.23205725,150,198,0,348,43.10344828,-5.04871795,-13.55606989
+BOS-20-2,"Boston · Ward 20, Precinct 2",20,2,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,38.30000000,350.91669652,917.11828260,478,133,0,611,78.23240589,2.55128205,21.57288773
+BOS-20-20,"Boston · Ward 20, Precinct 20",20,20,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,52.40000000,716.49232655,1366.15315292,231,279,0,510,45.29411765,16.65128205,-11.36540052
+BOS-20-21,"Boston · Ward 20, Precinct 21",20,21,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,58.50000000,79.96040373,136.73369565,18,21,0,39,46.15384615,22.75128205,-10.50567201
+BOS-20-3,"Boston · Ward 20, Precinct 3",20,3,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,58.20000000,523.60514715,899.03490662,134,154,0,288,46.52777778,22.45128205,-10.13174038
+BOS-20-4,"Boston · Ward 20, Precinct 4",20,4,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,39.50000000,245.03477708,620.85704631,437,98,0,535,81.68224299,3.75128205,25.02272483
+BOS-20-5,"Boston · Ward 20, Precinct 5",20,5,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,38.10000000,348.50867524,914.28815200,197,256,0,453,43.48785872,2.35128205,-13.17165944
+BOS-20-6,"Boston · Ward 20, Precinct 6",20,6,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,34.80000000,359.31790650,1032.77816016,318,314,0,632,50.31645570,-0.94871795,-6.34306247
+BOS-20-7,"Boston · Ward 20, Precinct 7",20,7,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,23.90000000,136.44844230,570.49248928,206,137,0,343,60.05830904,-11.84871795,3.39879088
+BOS-20-8,"Boston · Ward 20, Precinct 8",20,8,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,25.20000000,176.01814023,697.91018559,291,140,0,431,67.51740139,-10.54871795,10.85788323
+BOS-20-9,"Boston · Ward 20, Precinct 9",20,9,norfolk-suffolk,Norfolk and Suffolk,Persis Yu,Michael Rush,26.60000000,244.82794493,921.08297031,322,138,0,460,70.00000000,-9.14871795,13.34048184
+BOS-21-1,"Boston · Ward 21, Precinct 1",21,1,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,92.50000000,2054.00644122,2219.80676329,169,102,0,271,62.36162362,11.55714286,2.29064311
+BOS-21-10,"Boston · Ward 21, Precinct 10",21,10,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,82.00000000,1092.78349666,1332.97830185,191,64,0,255,74.90196078,1.05714286,14.83098028
+BOS-21-11,"Boston · Ward 21, Precinct 11",21,11,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,82.90000000,998.29579357,1204.78140629,174,92,0,266,65.41353383,1.95714286,5.34255333
+BOS-21-12,"Boston · Ward 21, Precinct 12",21,12,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,88.30000000,897.96899225,1016.58139535,130,109,0,239,54.39330544,7.35714286,-5.67767507
+BOS-21-13,"Boston · Ward 21, Precinct 13",21,13,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,87.90000000,1432.08088222,1629.16311063,203,161,0,364,55.76923077,6.95714286,-4.30174974
+BOS-21-14,"Boston · Ward 21, Precinct 14",21,14,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,83.60000000,820.25957918,980.60590624,122,70,0,192,63.54166667,2.65714286,3.47068616
+BOS-21-15,"Boston · Ward 21, Precinct 15",21,15,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,85.50000000,867.30317496,1013.98234967,163,80,0,243,67.07818930,4.55714286,7.00720879
+BOS-21-16,"Boston · Ward 21, Precinct 16",21,16,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,83.50000000,1080.46825361,1293.83034874,176,183,0,359,49.02506964,2.55714286,-11.04591087
+BOS-21-2,"Boston · Ward 21, Precinct 2",21,2,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,96.60000000,241.09811513,249.67189379,26,10,0,36,72.22222222,15.65714286,12.15124172
+BOS-21-3,"Boston · Ward 21, Precinct 3",21,3,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,97.60000000,1363.75923191,1397.05760709,115,44,0,159,72.32704403,16.65714286,12.25606352
+BOS-21-4,"Boston · Ward 21, Precinct 4",21,4,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,98.20000000,786.00000000,800.00000000,96,48,0,144,66.66666667,17.25714286,6.59568616
+BOS-21-5,"Boston · Ward 21, Precinct 5",21,5,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,91.30000000,1029.51760538,1127.46583932,169,84,0,253,66.79841897,10.35714286,6.72743847
+BOS-21-6,"Boston · Ward 21, Precinct 6",21,6,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,84.70000000,576.97867253,681.18055438,156,123,0,279,55.91397849,3.75714286,-4.15700201
+BOS-21-7,"Boston · Ward 21, Precinct 7",21,7,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,91.60000000,1108.80778522,1211.04367196,155,90,0,245,63.26530612,10.65714286,3.19432562
+BOS-21-8,"Boston · Ward 21, Precinct 8",21,8,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,91.40000000,1558.99402981,1706.24595783,227,87,0,314,72.29299363,10.45714286,12.22201312
+BOS-21-9,"Boston · Ward 21, Precinct 9",21,9,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,85.20000000,1432.81125223,1681.71585559,232,106,0,338,68.63905325,4.25714286,8.56807275
+BOS-22-1,"Boston · Ward 22, Precinct 1",22,1,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,80.20000000,1129.46422251,1407.48073049,169,113,0,282,59.92907801,-0.74285714,-0.14190249
+BOS-22-10,"Boston · Ward 22, Precinct 10",22,10,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,61.50000000,639.15507546,1039.92599883,222,120,0,342,64.91228070,-19.44285714,4.84130020
+BOS-22-11,"Boston · Ward 22, Precinct 11",22,11,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,57.60000000,443.16971608,769.03202942,155,110,0,265,58.49056604,-23.34285714,-1.58041447
+BOS-22-12,"Boston · Ward 22, Precinct 12",22,12,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,68.50000000,578.61389162,844.29534584,125,102,0,227,55.06607930,-12.44285714,-5.00490121
+BOS-22-13,"Boston · Ward 22, Precinct 13",22,13,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,55.30000000,320.19852941,578.84558824,107,103,0,210,50.95238095,-25.64285714,-9.11859955
+BOS-22-2,"Boston · Ward 22, Precinct 2",22,2,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,76.20000000,1121.58702964,1472.67006076,268,159,0,427,62.76346604,-4.74285714,2.69248554
+BOS-22-3,"Boston · Ward 22, Precinct 3",22,3,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,70.60000000,937.81076243,1328.08469490,239,148,0,387,61.75710594,-10.34285714,1.68612544
+BOS-22-4,"Boston · Ward 22, Precinct 4",22,4,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,55.40000000,441.29746280,796.52648147,200,163,0,363,55.09641873,-25.54285714,-4.97456177
+BOS-22-5,"Boston · Ward 22, Precinct 5",22,5,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,78.50000000,1019.75743688,1298.55500143,159,76,0,235,67.65957447,-2.44285714,7.58859396
+BOS-22-6,"Boston · Ward 22, Precinct 6",22,6,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,78.20000000,595.00000000,761.00000000,114,74,0,188,60.63829787,-2.74285714,0.56731737
+BOS-22-7,"Boston · Ward 22, Precinct 7",22,7,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,69.40000000,722.51424789,1040.53241666,192,148,0,340,56.47058824,-11.54285714,-3.60039227
+BOS-22-8,"Boston · Ward 22, Precinct 8",22,8,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,66.40000000,667.77617670,1005.59200327,112,118,0,230,48.69565217,-14.54285714,-11.37532833
+BOS-22-9,"Boston · Ward 22, Precinct 9",22,9,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,72.90000000,636.62669907,872.82734376,141,111,0,252,55.95238095,-8.04285714,-4.11859955
+BOS-04-10,"Boston · Ward 4, Precinct 10",4,10,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,91.60000000,487.83757196,532.37627166,20,25,0,45,44.44444444,10.65714286,-15.62653606
+BOS-04-12,"Boston · Ward 4, Precinct 12",4,12,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,78.70000000,352.67647059,448.13777090,33,31,0,64,51.56250000,-2.24285714,-8.50848051
+BOS-05-10,"Boston · Ward 5, Precinct 10",5,10,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,83.30000000,947.04981757,1137.18686608,91,57,0,148,61.48648649,2.35714286,1.41550598
+BOS-05-12,"Boston · Ward 5, Precinct 12",5,12,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,98.00000000,1576.53615280,1608.53615280,94,61,0,155,60.64516129,17.05714286,0.57418078
+BOS-05-15,"Boston · Ward 5, Precinct 15",5,15,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,79.30000000,739.30947328,932.79832405,67,105,0,172,38.95348837,-1.64285714,-21.11749213
+BOS-05-2,"Boston · Ward 5, Precinct 2",5,2,suffolk-middlesex,Suffolk and Middlesex,Daniel Lander,Will Brownsberger,88.60000000,1236.00000000,1394.60000000,119,92,0,211,56.39810427,7.65714286,-3.67287624

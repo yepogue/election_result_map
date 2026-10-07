@@ -29,6 +29,9 @@ const files = [
   "renter_analysis.json",
   "renter_precincts.csv",
   "renter_municipality_summary.csv",
+  "challenger_renter_analysis.json",
+  "challenger_renter_precincts.csv",
+  "challenger_renter_crosswalk.csv",
 ];
 
 mkdirSync(targetDir, { recursive: true });

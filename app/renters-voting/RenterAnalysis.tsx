@@ -4,6 +4,8 @@ import { useState } from "react";
 import type snapshot from "../../public/data/renter_analysis.json";
 import type sourceSnapshot from "../../public/data/sources.json";
 import type censusSnapshot from "../../public/data/census_data_dictionary.json";
+import type challengerSnapshot from "../../public/data/challenger_renter_analysis.json";
+import ChallengerRenters from "./ChallengerRenters";
 import { PageSections, SiteFooter, SiteHeader } from "../components/SiteNavigation";
 
 type AnalysisData = typeof snapshot;
@@ -167,25 +169,27 @@ function PrecinctExplorer({ data }: { data: AnalysisData }) {
   </section>;
 }
 
-export default function RenterAnalysis({ data, sources, census }: { data: AnalysisData; sources: typeof sourceSnapshot; census: typeof censusSnapshot }) {
+export default function RenterAnalysis({ data, sources, census, challengers }: { data: AnalysisData; sources: typeof sourceSnapshot; census: typeof censusSnapshot; challengers: typeof challengerSnapshot }) {
   return <main className="renter-page" id="top">
     <SiteHeader active="renters" />
-    <PageSections links={[["#comparison", "The result"], ["#method", "How it works"], ["#context", "City/town context"], ["#precincts", "Explore precincts"], ["#sources", "Sources & data"]]} />
+    <PageSections links={[["#comparison", "The result"], ["#method", "How it works"], ["#context", "City/town context"], ["#precincts", "Explore precincts"], ["#challengers", "Three challengers"], ["#sources", "Sources & data"]]} />
     <section className="renter-hero" id="main-content" tabIndex={-1}>
       <p className="kicker">59 precincts · Suffolk &amp; Middlesex Senate primary</p>
       <h1>Renters &amp; voting</h1>
       <p className="renter-question">Did precincts with more renter households give Brownsberger a smaller vote share, even within the same city or town?</p>
       <div className="renter-answer"><strong>Yes. Precincts with a higher renter share tended to give Brownsberger a smaller share of the vote.</strong><p>The relationship is weaker after accounting for city/town differences, but it does not disappear.</p></div>
       <p className="renter-note">This compares places, not individual voters. It does not show that renting caused someone to vote a certain way.</p>
+      <p className="renter-note renter-additional-link">Also on this page: <a href="#challengers">renter share and the three challengers combined, in Boston</a>.</p>
       <KeyTerms />
     </section>
     <section className="renter-section" id="comparison" aria-labelledby="renter-comparison-heading"><h2 id="renter-comparison-heading">The result, with and without municipality</h2><p>Imagine one precinct where 40% of households rent and another where 50% rent. The second has a renter share 10 percentage points higher. The numbers below describe its estimated vote-share difference from the first precinct.</p><ResultComparison data={data} /></section>
     <MunicipalityExplanation data={data} />
     <MunicipalContext data={data} />
     <PrecinctExplorer data={data} />
+    <ChallengerRenters data={challengers} />
     <section className="renter-section" id="sources" aria-labelledby="renter-sources-heading">
       <h2 id="renter-sources-heading">Sources &amp; downloadable data</h2>
-      <p>Votes are the certified post-recount results for September 1, 2026. Renter shares are Census American Community Survey (ACS) estimates from 2020–2024, mapped to precinct boundaries—not a survey of this election’s voters.</p>
+      <p>The Brownsberger analysis uses certified post-recount results for September 1, 2026. The three-challenger comparison uses the same official state election snapshots as the Wu comparisons page, with its race-specific sources listed above. Renter shares are Census American Community Survey (ACS) estimates from 2020–2024, mapped to precinct boundaries—not a survey of this election’s voters.</p>
       <div className="renter-downloads"><a href="/assets/data/renter_precincts.csv" download>Precinct data CSV ↓</a><a href="/assets/data/renter_municipality_summary.csv" download>City/town summaries CSV ↓</a></div>
       <ul className="renter-sources"><li><a href={sources[0].url} target="_blank" rel="noreferrer">Secretary of the Commonwealth: certified post-recount precinct export ↗</a></li><li><a href={census.sources[3].url} target="_blank" rel="noreferrer">U.S. Census Bureau: 2020–2024 ACS five-year data ↗</a> · B25003, retrieved via the <a href={census.sources[3].retrievalUrl} target="_blank" rel="noreferrer">Census Reporter API</a></li><li><a href="/election-map#context">Precinct allocation method and Census crosswalk downloads</a> · <a href="/assets/data/census_data_dictionary.json" download>Data dictionary</a></li></ul>
       <details className="reader-details renter-calculation-notes"><summary>Data &amp; calculation notes</summary>
@@ -194,7 +198,7 @@ export default function RenterAnalysis({ data, sources, census }: { data: Analys
         <p>Renter household counts from ACS table B25003 are distributed from Census areas to precincts using 2020 housing-unit counts. The calculation uses the published one-decimal renter percentages. The <a href="/precinct-factor-analysis">Community factors</a> page uses a different calculation and comparison size, so its numbers are not directly interchangeable with these.</p>
         <p><a href="/assets/data/renter_analysis.json" download>Download the full calculation record (JSON)</a></p>
       </details>
-      <details className="reader-details renter-changelog"><summary>Change log</summary><p><time dateTime="2026-10-06">October 6, 2026</time> — The interactive precinct chart now opens expanded, with both comparison views immediately available.</p><p><time dateTime={data.analysisDate}>October 5, 2026</time> — Added the renter analysis and plain-language municipality explanation. Clarified the chart’s precinct comparison and added vote counts, vote share, and all-party turnout to the city/town table and downloads. The renter-analysis estimates and source data are unchanged.</p></details>
+      <details className="reader-details renter-changelog"><summary>Change log</summary><p><time dateTime="2026-10-06">October 6, 2026</time> — Added a pooled renter-share comparison for the 156 Boston precincts in the Gayle, Lander, and Yu races, with sources and downloadable allocation data. The original Brownsberger analysis is unchanged. Both interactive charts open expanded.</p><p><time dateTime={data.analysisDate}>October 5, 2026</time> — Added the renter analysis and plain-language municipality explanation. Clarified the chart’s precinct comparison and added vote counts, vote share, and all-party turnout to the city/town table and downloads. The renter-analysis estimates and source data are unchanged.</p></details>
     </section>
     <SiteFooter />
   </main>;
